@@ -1,0 +1,119 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('index');
+});
+
+Route::get('/index', function () {
+    return view('index');
+});
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');
+
+Route::get('/worker', 'HomeController@worker');
+
+Route::get('/addworker', 'HomeController@addworker');
+
+Route::get('/adddrug', 'HomeController@adddrug');
+
+Route::get('/drug', 'HomeController@drug');
+
+Route::get('/sales', 'HomeController@sales');
+
+Route::get('/recnum', 'HomeController@recnum');
+
+Route::get('/payment', 'HomeController@payment');
+
+Route::get('/receipt', 'HomeController@receipt');
+
+Route::get('/tendered', 'HomeController@tendered');
+
+Route::get('/rangesales', 'HomeController@rangesales');
+
+Route::get('/profit', 'HomeController@profit');
+
+Route::get('/drugedit/{id}', 'HomeController@drugedit');
+
+Route::get('/drugadd/{id}', 'HomeController@drugadd');
+
+Route::get('/drugbreakdown/{id}', 'HomeController@drugbreakdown');
+
+Route::get('/workeredit/{id}', 'HomeController@workeredit');
+
+Route::get('/workerdelete/{id}', 'HomeController@workerdelete');
+
+Route::get('/stock', 'HomeController@stock');
+
+Route::get('/addnewstock', 'HomeController@addnewstock');
+
+Route::post('/enterdrug', 'HomeController@enterdrug');
+
+Route::post('/registerworker', 'HomeController@registerworker');
+
+Route::post('/updatedrug', 'HomeController@updatedrug');
+
+Route::post('/updateworker', 'HomeController@updateworker');
+
+Route::post('/addstock', 'HomeController@addstock');
+
+Route::get('/stockadd/{id}', 'HomeController@stockadd');
+
+Route::get('/stockedit/{id}', 'HomeController@stockedit');
+
+Route::get('/stockbreakdown/{id}', 'HomeController@stockbreakdown');
+
+Route::get('/breakdown', 'HomeController@breakdown');
+
+Route::get('/recall', 'HomeController@recall');
+
+Route::get('/report', 'HomeController@report');
+
+Route::get('/thereport', 'HomeController@thereport');
+
+Route::get('/return', 'HomeController@return');
+
+Route::get('/thereturn', 'HomeController@thereturn');
+
+Route::get('/order/{id}', 'HomeController@order');
+
+Route::post('/sale_enter', 'HomeController@sale_enter');
+
+Route::post('/updatestock', 'HomeController@updatestock');
+
+Route::post('/checkreturn', 'HomeController@checkreturn');
+
+Route::post('/searchrec', 'HomeController@searchrec');
+
+Route::post('/enterstock', 'HomeController@enterstock');
+
+Route::post('/entertendered', 'HomeController@entertendered');
+
+Route::post('/checkprofit', 'HomeController@checkprofit');
+
+Route::post('/stockenter', 'HomeController@stockenter');
+
+Route::post('/orderenter', 'HomeController@orderenter');
+
+Route::post('/checkbreakdown', 'HomeController@checkbreakdown');
+
+Route::post('/checkreport', 'HomeController@checkreport');
+
+Route::post('/checkpres', 'HomeController@checkpres');
+
+Route::post('/returndrugs', 'HomeController@returndrugs');
+
+Route::get('/live_search/action', 'HomeController@action')->name('live_search.action');
