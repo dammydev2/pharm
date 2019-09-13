@@ -16,7 +16,6 @@ class CreateStoresTable extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('bulk');
             $table->string('qty');
             $table->string('cprice');
             $table->string('onhand')->default(0);

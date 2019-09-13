@@ -325,13 +325,11 @@ public function enterstock(Request $request)
 {
   $request->validate([
     'name' => 'required|unique:stores',
-    'bulk' => 'required',
     'qty' => 'required',
     'cprice' => 'required',
   ]);
   Store::create([
     'name' => $request['name'],
-    'bulk' => $request['bulk'],
     'qty' => $request['qty'],
     'cprice' => $request['cprice'],
   ]);

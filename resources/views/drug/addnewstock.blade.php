@@ -25,14 +25,14 @@
                         <input type="text" name="name"  class="form-control">
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
     					<label>Bulk form</label>
     					<input type="text" name="bulk" placeholder="e.g. carton, sachet"  class="form-control">
-    				</div>
+    				</div> -->
 
     				<div class="form-group">
-    					<label>Quantity in pieces</label>
-    					<input type="number" name="qty"  class="form-control">
+    					<label>Bulk form (in pieces)</label>
+    					<input type="number" name="qty" placeholder="e.g. 200" class="form-control">
     				</div>
 
                     <div class="form-group">
