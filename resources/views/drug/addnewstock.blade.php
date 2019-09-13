@@ -25,13 +25,13 @@
                         <input type="text" name="name"  class="form-control">
                     </div>
 
-                    <!-- <div class="form-group">
-    					<label>Bulk form</label>
-    					<input type="text" name="bulk" placeholder="e.g. carton, sachet"  class="form-control">
-    				</div> -->
+                    <div class="form-group">
+    					<label>Reorder Level</label>
+    					<input type="number" name="reorder" placeholder="e.g. 10"  class="form-control">
+    				</div>
 
     				<div class="form-group">
-    					<label>Bulk form (in pieces)</label>
+    					<label>Pack Size (in pieces)</label>
     					<input type="number" name="qty" placeholder="e.g. 200" class="form-control">
     				</div>
 

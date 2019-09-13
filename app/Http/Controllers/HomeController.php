@@ -332,6 +332,7 @@ public function enterstock(Request $request)
     'name' => $request['name'],
     'qty' => $request['qty'],
     'cprice' => $request['cprice'],
+    'reorder' => $request['reorder'],
   ]);
   Session::flash('success', 'Drug added successfully');
   return redirect('stock');
@@ -376,6 +377,7 @@ public function stockenter(Request $request)
     'quantity' => 'required',
     'exp' => 'required',
   ]);
+  //return $request;
   Storestock::create([
     'name' => $request['name'],
     'cprice' => $request['cprice'],
@@ -389,6 +391,7 @@ public function stockenter(Request $request)
   ->update([
     'qtyonhand' => $newstock,
     'onhand' => $onhand,
+    'qty' => $request['qty'],
   ]);
   Session::flash('success', 'New stock added successfully');
   return redirect('stock');

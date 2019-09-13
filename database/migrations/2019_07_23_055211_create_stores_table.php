@@ -18,6 +18,7 @@ class CreateStoresTable extends Migration
             $table->string('name');
             $table->string('qty');
             $table->string('cprice');
+            $table->string('reorder');
             $table->string('onhand')->default(0);
             $table->string('qtyonhand')->default(0);
             $table->timestamps();

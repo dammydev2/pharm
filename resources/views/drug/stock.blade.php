@@ -34,13 +34,13 @@
                         <td>{{ $row->name }}</td>
                         <td>{{ $row->qty }}</td>
                         <td>
-                            @if($row->qtyonhand < 11)
+                            @if( ($row->onhand ) < $row->reorder)
                             <span style="color: red;">
                             @endif
-                            {{ $row->qtyonhand }} {{ $row->bulk }}
+                            {{ $row->qtyonhand }} X {{ $row->qty }}
                             </span>
                         </td>
-                        <td>{{ $row->qtyonhand * $row->qty }}</td>
+                        <td>{{ $row->onhand }}</td>
                         <td><a href="{{ url('/stockadd/'.$row->id) }}">Add Stock</a></td>
                         <td><a href="{{ url('/order/'.$row->id) }}">Order</a></td>
                         <td><a href="{{ url('/stockedit/'.$row->id) }}">Edit</a></td>

@@ -31,6 +31,11 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Pack Size</label>
+                        <input type="number" name="qty" value="{{ $row->qty }}" class="form-control">
+                    </div>
+
+                    <div class="form-group">
                         <label>Quantity Brought in {{ $row->bulk }}</label>
                         <input type="number" name="quantity" class="form-control">
                     </div>
@@ -41,7 +46,6 @@
                     </div>
 
                     <input type="hidden" name="id" value="{{ $row->id }}" >
-                    <input type="hidden" name="qty" value="{{ $row->qty }}" >
                     <input type="hidden" name="onhand" value="{{ $row->onhand }}" >
                     <input type="hidden" name="qtyonhand" value="{{ $row->qtyonhand }}" >
 
