@@ -44,6 +44,11 @@
                         <input type="text" name="collector" class="form-control">
                     </div>
 
+                    <div class="form-group">
+                        <label>Unit collecting</label>
+                        <input type="text" name="unit" class="form-control">
+                    </div>
+
                     <input type="hidden" name="id" value="{{ $row->id }}" >
 
                     @endforeach

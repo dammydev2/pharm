@@ -420,6 +420,7 @@ public function orderenter(Request $request)
     'name' => $request['name'],
     'quantity' => $request['quantity'],
     'collector' => $request['collector'],
+    'collecting_unit' => $request['unit'],
     'seller' => \Auth::User()->name,
   ]);
 
