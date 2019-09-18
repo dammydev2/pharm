@@ -49,6 +49,11 @@
                         <input type="text" name="unit" class="form-control">
                     </div>
 
+                    <div class="form-group">
+                        <label>Bulk Form</label>
+                        <input type="text" name="bulk" value="{{ $row->qty }}" class="form-control">
+                    </div>
+
                     <input type="hidden" name="id" value="{{ $row->id }}" >
 
                     @endforeach

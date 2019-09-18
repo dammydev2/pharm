@@ -19,6 +19,7 @@ class CreateStorestocksTable extends Migration
             $table->string('cprice');
             $table->string('quantity');
             $table->string('exp');
+            $table->string('pack');
             $table->string('autenticate');
             $table->timestamps();
         });

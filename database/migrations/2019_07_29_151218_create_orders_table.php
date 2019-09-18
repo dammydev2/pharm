@@ -19,6 +19,7 @@ class CreateOrdersTable extends Migration
             $table->string('quantity');
             $table->string('collector');
             $table->string('seller');
+            $table->string('bulk');
             $table->string('collecting_unit');
             $table->timestamps();
         });

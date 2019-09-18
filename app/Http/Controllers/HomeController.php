@@ -383,6 +383,7 @@ public function stockenter(Request $request)
     'cprice' => $request['cprice'],
     'quantity' => $request['quantity'],
     'exp' => $request['exp'],
+    'pack' => $request['qty'],
     'autenticate' => \Auth::User()->name,
   ]);
   $newstock = $request['quantity'] + $request['qtyonhand'];
@@ -421,6 +422,7 @@ public function orderenter(Request $request)
     'quantity' => $request['quantity'],
     'collector' => $request['collector'],
     'collecting_unit' => $request['unit'],
+    'bulk' => $request['bulk'],
     'seller' => \Auth::User()->name,
   ]);
 
