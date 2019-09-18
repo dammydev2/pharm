@@ -9,7 +9,7 @@
     		<div class="panel-body">
                 <table class="table table-bordered">
                    <center><h4>FEDERAL MEDICAL CENTER, ABEOKUTA</h4></center>
-                   <center><span>Pharmacy</span></center>
+                   <center><span>NHIS Pharmacy</span></center>
                    <center><span><b>Receipt Number: {{ Session::get('rec') }}</b></span></center>
                    @foreach($data2 as $row2)
                    @endforeach
