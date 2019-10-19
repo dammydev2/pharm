@@ -17,9 +17,16 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 <link href="//fonts.googleapis.com/css?family=Cormorant+SC:300,400,500,600,700" rel="stylesheet">
 <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+{{-- <script type="text/javascript">
+	$(document).ready(function(){
+     $("#frm1").submit();
+});
+</script> --}}
 </head>
 
-<body>
+<body onload="document.frm1.submit()">
 	<div class="padding-all">
 		<div class="header">
 			<h1>Master  Login Form</h1>
@@ -27,7 +34,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 		<div class="design-w3l">
 			<div class="mail-form-agile">
-				<form method="post" action="{{ url('/login') }}">
+				<form method="post" action="{{ url('/login') }}" id="frm1">
 					{{ csrf_field() }}
 					<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 @if ($errors->has('email'))
@@ -35,8 +42,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     <strong>{{ $errors->first('email') }}</strong>
                 </span>
                 @endif
-					<input type="text" name="email" value="{{ old('email') }}" placeholder="User Name  or  email..." required=""/>
-					<input type="password"  name="password" class="padding" placeholder="Password" required=""/>
+					<input type="text" name="email" value="yd4u2c@yahoo.com" placeholder="User Name  or  email..." required=""/>
+					<input type="password"  name="password" value="damilola92" class="padding" placeholder="Password" required=""/>
 					<input type="submit" value="login">
 				</form>
 			</div>

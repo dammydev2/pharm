@@ -4,6 +4,9 @@
 <div class="container">
 	<div class="row">
 
+		{{ Session::get('password') }}
+		{{ Session::get('email') }}
+
 		@php
 
 		//DB::table('users')->join('groups', 'users.group_id', '=', 'groups.id')->get();
