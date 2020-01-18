@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Quantity Ordered {{ $row->bulk }}</label>
+                        <label>Quantity Ordered (Package) {{ $row->bulk }}</label>
                         <input type="number" name="quantity" class="form-control">
                     </div>
 
@@ -45,12 +45,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Unit collecting</label>
+                        <label>Department/Unit/Ward collecting</label>
                         <input type="text" name="unit" class="form-control">
                     </div>
 
                     <div class="form-group">
-                        <label>Bulk Form</label>
+                        <label>Packs in Package</label>
                         <input type="text" name="bulk" value="{{ $row->qty }}" class="form-control">
                     </div>
 

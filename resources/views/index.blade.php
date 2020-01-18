@@ -42,8 +42,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     <strong>{{ $errors->first('email') }}</strong>
                 </span>
                 @endif
-					<input type="text" name="email" value="yd4u2c@yahoo.com" placeholder="User Name  or  email..." required=""/>
-					<input type="password"  name="password" value="damilola92" class="padding" placeholder="Password" required=""/>
+					<input type="text" name="email"  placeholder="User Name  or  email..." required=""/>
+					<input type="password"  name="password" class="padding" placeholder="Password" required=""/>
 					<input type="submit" value="login">
 				</form>
 			</div>

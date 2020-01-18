@@ -67,6 +67,7 @@
                                 <select class="form-control" name="type">
                                     <option value="store">Store</option>
                                     <option value="sales">Sales</option>
+                                    <option value="payment">Payment</option>
                                 </select>
                             </div>
 

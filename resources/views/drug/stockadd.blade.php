@@ -31,18 +31,28 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Pack Size</label>
+                        <label>Packs in Package / Pack Size</label>
                         <input type="number" name="qty" value="{{ $row->qty }}" class="form-control">
                     </div>
 
                     <div class="form-group">
-                        <label>Quantity Brought in {{ $row->bulk }}</label>
+                        <label>Quantity (Package) Brought in {{ $row->bulk }}</label>
                         <input type="number" name="quantity" class="form-control">
                     </div>
 
                     <div class="form-group">
                         <label>Expire Date</label>
                         <input type="date" name="exp" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Batch Number</label>
+                        <input type="text" name="batch_no" required="" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Supplier's Name</label>
+                        <input type="text" name="supplier_name" required="" class="form-control">
                     </div>
 
                     <input type="hidden" name="id" value="{{ $row->id }}" >

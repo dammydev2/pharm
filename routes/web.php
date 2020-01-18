@@ -50,6 +50,8 @@ Route::get('/drugedit/{id}', 'HomeController@drugedit');
 
 Route::get('/drugadd/{id}', 'HomeController@drugadd');
 
+Route::get('/getrec/{id}', 'HomeController@getrec');
+
 Route::get('/drugbreakdown/{id}', 'HomeController@drugbreakdown');
 
 Route::get('/workeredit/{id}', 'HomeController@workeredit');

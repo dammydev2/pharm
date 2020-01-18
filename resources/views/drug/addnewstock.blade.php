@@ -31,12 +31,12 @@
     				</div>
 
     				<div class="form-group">
-    					<label>Pack Size (in pieces)</label>
+    					<label>Packs in Package</label>
     					<input type="number" name="qty" placeholder="e.g. 200" class="form-control">
     				</div>
 
                     <div class="form-group">
-                        <label>Cost Price</label>
+                        <label>Cost Price (Package)</label>
                         <input type="number" name="cprice" class="form-control">
                     </div>                
 

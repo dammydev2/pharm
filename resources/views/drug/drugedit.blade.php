@@ -27,7 +27,7 @@
 
     				<div class="form-group">
     					<label>Selling Price</label>
-    					<input type="number" name="price" value="{{ $row->sprice }}" class="form-control">
+    					<input type="number" name="price" step="any" value="{{ $row->sprice }}" class="form-control">
     				</div>
 
                     <input type="hidden" name="id" value="{{ $row->id }}" >

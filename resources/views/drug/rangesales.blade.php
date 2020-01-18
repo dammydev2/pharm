@@ -27,7 +27,7 @@
                     ?>
                     @foreach($data as $row)
                     <tr>
-                        <td>{{ $row->rec }}</td>
+                        <td><a href="{{ url('/getrec/'.$row->rec) }}">{{ $row->rec }}</a></td>
                         <td>{{ $row->cprice }}</td>
                         <td>{{ $row->sprice }}</td>
                         <td>{{ $row->amount }}</td>

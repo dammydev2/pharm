@@ -21,9 +21,9 @@
                     </tr>
                     <tr>
                         <th>Drug Name</th>
-                        <th>Expected pecies</th>
+                        <th>Packs in Package / Pack Size</th>
                         <th>Qty in store</th>
-                        <th>Qty in pieces</th>
+                        <th>Qty (Units) in packs</th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -40,7 +40,7 @@
                             {{ $row->qtyonhand }} X {{ $row->qty }}
                             </span>
                         </td>
-                        <td>{{ $row->onhand }}</td>
+                        <td>{{ number_format($row->qtyonhand * $row->qty, 0) }}</td>
                         <td><a href="{{ url('/stockadd/'.$row->id) }}">Add Stock</a></td>
                         <td><a href="{{ url('/order/'.$row->id) }}">Order</a></td>
                         <td><a href="{{ url('/stockedit/'.$row->id) }}">Edit</a></td>

@@ -274,6 +274,12 @@ public function entertendered(Request $request)
   return redirect('receipt');
 }
 
+public function getrec($id)
+{
+  Session::put('rec', $id);
+  return redirect('receipt');
+}
+
 public function receipt()
 {
   $rec = Session::get('rec');
@@ -384,6 +390,8 @@ public function stockenter(Request $request)
     'quantity' => $request['quantity'],
     'exp' => $request['exp'],
     'pack' => $request['qty'],
+    'batch_no' => $request['batch_no'],
+    'supplier_name' => $request['supplier_name'],
     'autenticate' => \Auth::User()->name,
   ]);
   $newstock = $request['quantity'] + $request['qtyonhand'];
@@ -463,11 +471,13 @@ public function breakdown()
   //GETTING THE STOCK
   $data = Storestock::where('created_at', '>=', $date)
   ->where('created_at', '<=', $date2)
-  ->where('name', $name)->get();
+  ->where('name', $name)
+  ->orderBy('id', 'desc')->paginate(12);
   //GETTING THE SALES
   $data2 = Order::where('created_at', '>=', $date)
   ->where('created_at', '<=', $date2)
-  ->where('name', $name)->get();
+  ->where('name', $name)
+  ->orderBy('id', 'desc')->paginate(12);
 
   return view('drug.breakdown', compact('data','data2'));
 }

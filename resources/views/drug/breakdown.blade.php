@@ -8,17 +8,19 @@
     		<div class="panel-heading">{{ Session::get('name') }} Breakdown from {{ Session::get('date') }} to {{ Session::get('date2') }}</div>
     		<div class="panel-body">
 
-                <div class="col-sm-5">
+                <div class="col-lg-10 col-sm-12">
                    <table class="table table-bordered">
                     <tr>
-                        <th  colspan="5"><center>{{ Session::get('name') }} Stock</center></th>
+                        <th  colspan="5"><center>{{ Session::get('name') }} Supplied Stock</center></th>
                     </tr>
                     <tr>
-                        <th>Date brought</th>
+                        <th>Date supplied</th>
                         <th>Name</th>
+                        <th>Supplier's Name</th>
+                        <th>Batch NO</th>
                         <th>Cost Price</th>
-                        <th>Qty brought in</th>
-                        <th>Autenticator</th>
+                        <th>Qty supplied</th>
+                        <th>Authenticator</th>
                     </tr>
 
                     @foreach($data as $row)
@@ -30,12 +32,14 @@
                     <tr>
                         <td>{{ $date }}</td>
                         <td>{{ $row->name }}</td>
+                        <td>{{ $row->supplier_name }}</td>
+                        <td>{{ $row->batch_no }}</td>
                         <td>{{ $row->cprice }}</td>
                         <td>{{ $row->quantity }} X {{ $row->pack }}</td>
                         <td>{{ $row->autenticate }}</td>
                     </tr>
                     @endforeach
-
+{{ $data->links() }}
                 </table>
             </div>
 
@@ -68,7 +72,7 @@
                     <td>{{ $row->seller }}</td>
                 </tr>
                 @endforeach
-
+{{ $data2->links() }}
             </table>
         </div>
 
