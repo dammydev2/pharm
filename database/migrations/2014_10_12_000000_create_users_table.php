@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
         array(
             'name' => 'ICT',
             'email' => 'ict@fmc.com',
-            'password' => '$2y$10$SDxzg4TNLiIIlBjf9b5oaOUCYcMbYc/w.In19uTW8Bhk8AC9LXxFy',
+            'password' => '$2y$10$aYwiyqn.oq5BT2fJYnIfHOGAxIkBI24xnPjQJhXPvUOmsI3XJhAWO',
             'created_at' => '2019-07-31 06:47:20'
         )
     );

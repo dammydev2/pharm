@@ -66,6 +66,7 @@
                                 <label>Member type</label>
                                 <select class="form-control" name="type">
                                     <option value="store">Store</option>
+                                    <option value="substore">SubStore</option>
                                     <option value="sales">Sales</option>
                                     <option value="payment">Payment</option>
                                 </select>

@@ -13,6 +13,7 @@ use App\Storestock;
 use App\Order;
 use Session;
 use Hash;
+use Redirect;
 
 class HomeController extends Controller
 {
@@ -78,10 +79,13 @@ class HomeController extends Controller
         'name' => 'required',
         'price' => 'required',
       ]);
+      #calculating the % profit
+      $markup = ((($request['price'] - $request['c_price']) * 100 ) / $request['c_price'] );
       Drug::where('id', $request['id'])
       ->update([
         'name' => $request['name'],
         'sprice' => $request['price'],
+        'markup' => $markup,
       ]);
       Session::flash('success', 'updated successfully');
       return redirect('drug');
@@ -102,12 +106,15 @@ class HomeController extends Controller
         'quantity' => 'required',
         'exp' => 'required',
       ]);
+      #calculating the % profit
+      $markup = ((($request['price'] - $request['cprice']) * 100 ) / $request['cprice'] );
       $newqty = $request['qty'] + $request['quantity'];
       Drug::where('id', $request['id'])
       ->update([
         'qty' => $newqty,
         'sprice' => $request['price'],
         'cprice' => $request['cprice'],
+        'markup' => $markup
       ]);
       NewStock::create([
         'name' => $request['name'],
@@ -318,7 +325,7 @@ public function rangesales()
 
 public function stock()
 {
-  $data = Store::orderBy( 'qtyonhand', 'desc')->paginate(200);
+  $data = Store::where('type', \Auth::User()->type)->orderBy( 'qtyonhand', 'desc')->paginate(200);
   return view('drug.stock', compact('data'));
 }
 
@@ -330,15 +337,21 @@ public function addnewstock()
 public function enterstock(Request $request)
 {
   $request->validate([
-    'name' => 'required|unique:stores',
+    'name' => 'required',
     'qty' => 'required',
     'cprice' => 'required',
   ]);
+  $chk = Store::where('name', $request['name'])
+  ->where('type', \Auth::User()->type)->get();
+  if (!$chk->isEmpty()) {
+    return Redirect::back()->withErrors(['Drug already added']);
+  }
   Store::create([
     'name' => $request['name'],
     'qty' => $request['qty'],
     'cprice' => $request['cprice'],
     'reorder' => $request['reorder'],
+    'type' => \Auth::User()->type,
   ]);
   Session::flash('success', 'Drug added successfully');
   return redirect('stock');
@@ -393,10 +406,12 @@ public function stockenter(Request $request)
     'batch_no' => $request['batch_no'],
     'supplier_name' => $request['supplier_name'],
     'autenticate' => \Auth::User()->name,
+    'type' => \Auth::User()->type,
   ]);
   $newstock = $request['quantity'] + $request['qtyonhand'];
   $onhand = $request['qty'] * $request['quantity'] + $request['onhand'];
   Store::where('id', $request['id'])
+  ->where('type', \Auth::User()->type)
   ->update([
     'qtyonhand' => $newstock,
     'onhand' => $onhand,
@@ -408,7 +423,7 @@ public function stockenter(Request $request)
 
 public function order($id)
 {
-  $data = Store::where('id', $id)->get();
+  $data = Store::where('id', $id)->where('type', \Auth::User()->type)->get();
   return view('drug.order', compact('data'));
 }
 
@@ -432,9 +447,11 @@ public function orderenter(Request $request)
     'collecting_unit' => $request['unit'],
     'bulk' => $request['bulk'],
     'seller' => \Auth::User()->name,
+    'type' => \Auth::User()->type
   ]);
 
   Store::where('id', $request['id'])
+  ->where('type', \Auth::User()->type)
   ->update([
     'qtyonhand' => $newqty,
   ]);
@@ -472,11 +489,13 @@ public function breakdown()
   $data = Storestock::where('created_at', '>=', $date)
   ->where('created_at', '<=', $date2)
   ->where('name', $name)
+  ->where('type', \Auth::User()->type)
   ->orderBy('id', 'desc')->paginate(12);
   //GETTING THE SALES
   $data2 = Order::where('created_at', '>=', $date)
   ->where('created_at', '<=', $date2)
   ->where('name', $name)
+  ->where('type', \Auth::User()->type)
   ->orderBy('id', 'desc')->paginate(12);
 
   return view('drug.breakdown', compact('data','data2'));

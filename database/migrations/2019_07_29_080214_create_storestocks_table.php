@@ -23,6 +23,7 @@ class CreateStorestocksTable extends Migration
             $table->string('autenticate');
             $table->string('batch_no');
             $table->string('supplier_name');
+            $table->string('type');
             $table->timestamps();
         });
     }
