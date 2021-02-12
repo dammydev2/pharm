@@ -38,7 +38,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					{{ csrf_field() }}
 					<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                 @if ($errors->has('email'))
-                    <span class="help-block">
+                    <span class="help-block text-danger">
                     <strong>{{ $errors->first('email') }}</strong>
                 </span>
                 @endif
