@@ -348,7 +348,6 @@ public function enterstock(Request $request)
   }
   Store::create([
     'name' => $request['name'],
-    'qty' => $request['qty'],
     'cprice' => $request['cprice'],
     'reorder' => $request['reorder'],
     'type' => \Auth::User()->type,
@@ -432,6 +431,7 @@ public function orderenter(Request $request)
   $request->validate([
     'quantity' => 'required',
     'collector' => 'required',
+    'unit' => 'required',
   ]);
 
   $newqty = $request['qtyonhand'] - $request['quantity'];

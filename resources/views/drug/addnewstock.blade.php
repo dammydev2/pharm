@@ -29,11 +29,11 @@
     					<label>Reorder Level</label>
     					<input type="number" name="reorder" placeholder="e.g. 10"  class="form-control">
     				</div>
-
+<!-- 
     				<div class="form-group">
     					<label>Packs in Package</label>
     					<input type="number" name="qty" placeholder="e.g. 200" class="form-control">
-    				</div>
+    				</div> -->
 
                     <div class="form-group">
                         <label>Cost Price (Package)</label>
