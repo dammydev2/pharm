@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Quantity Brought in (Dispensing Bits)</label>
+                        <label>Quantity Brought in (Dispensing units)</label>
                         <input type="number" name="quantity" class="form-control">
                     </div>
 

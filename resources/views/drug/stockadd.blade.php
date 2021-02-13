@@ -30,13 +30,13 @@
                         <input type="number" name="cprice" value="{{ $row->cprice }}" class="form-control">
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Packs in Package / Pack Size</label>
                         <input type="number" name="qty" value="{{ $row->qty }}" class="form-control">
-                    </div>
+                    </div> -->
 
                     <div class="form-group">
-                        <label>Quantity (Package) Brought in {{ $row->bulk }}</label>
+                        <label>Quantity (unit) Brought in </label>
                         <input type="number" name="quantity" class="form-control">
                     </div>
 

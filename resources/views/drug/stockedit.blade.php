@@ -25,14 +25,14 @@
                         <input type="text" value="{{ $row->name }}" name="name"  class="form-control">
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
     					<label>Bulk form</label>
     					<input type="text" name="bulk" value="{{ $row->bulk }}" placeholder="e.g. carton, sachet"  class="form-control">
-    				</div>
+    				</div> -->
 
     				<div class="form-group">
-    					<label>Quantity in pieces</label>
-    					<input type="number" name="qty" value="{{ $row->qty }}" class="form-control">
+    					<label>Quantity in unit</label>
+    					<input type="number" name="qty" value="{{ $row->qtyonhand }}" class="form-control">
     				</div>
 
                     <div class="form-group">

@@ -30,12 +30,12 @@
     				</div>
 
                     <div class="form-group">
-                        <label>Quantity in store (in {{ $row->bulk }})</label>
+                        <label>Quantity in store</label>
                         <input type="number" name="qtyonhand" value="{{ $row->qtyonhand }}" readonly="" class="form-control">
                     </div>
 
                     <div class="form-group">
-                        <label>Quantity Ordered (Package) {{ $row->bulk }}</label>
+                        <label>Quantity Ordered (unit)</label>
                         <input type="number" name="quantity" class="form-control">
                     </div>
 
@@ -49,10 +49,10 @@
                         <input type="text" name="unit" class="form-control">
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Packs in Package</label>
                         <input type="text" name="bulk" value="{{ $row->qty }}" class="form-control">
-                    </div>
+                    </div> -->
 
                     <input type="hidden" name="id" value="{{ $row->id }}" >
 
