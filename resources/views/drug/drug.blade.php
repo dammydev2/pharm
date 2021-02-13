@@ -24,7 +24,7 @@
                         <th>Markup</th>
                         <th>Cost Price</th>
                         <th>Selling Price</th>
-                        <th>Quantity (Bits)</th>
+                        <th>Quantity (units)</th>
                         <th></th>
                         <th></th>
                         <th></th>

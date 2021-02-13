@@ -49,12 +49,13 @@ class HomeController extends Controller
         'markup' => 'required',
         'price' => 'required',
       ]);
+      $newMarkup = $request['markup'] + 5;
        // dd($request);
-      $cost = ($request['markup']/100) * $request['price'] + $request['price'];
+      $cost = ($newMarkup/100) * $request['price'] + $request['price'];
       //sdd($request['price']);
       Drug::create([
         'name' => $request['name'],
-        'markup' => $request['markup'],
+        'markup' => $newMarkup,
         'cprice' => $request['price'],
         'sprice' => $cost,
       ]);

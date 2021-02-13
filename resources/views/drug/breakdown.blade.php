@@ -35,7 +35,7 @@
                         <td>{{ $row->supplier_name }}</td>
                         <td>{{ $row->batch_no }}</td>
                         <td>{{ $row->cprice }}</td>
-                        <td>{{ $row->quantity }} X {{ $row->pack }}</td>
+                        <td>{{ $row->quantity }} </td>
                         <td>{{ $row->autenticate }}</td>
                     </tr>
                     @endforeach
@@ -68,7 +68,7 @@
                     <td>{{ $row->name }}</td>
                     <td>{{ $row->collector }}</td>
                     <td>{{ $row->collecting_unit }}</td>
-                    <td>{{ $row->quantity }} X {{ $row->bulk }}</td>
+                    <td>{{ $row->quantity }} </td>
                     <td>{{ $row->seller }}</td>
                 </tr>
                 @endforeach

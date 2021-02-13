@@ -8,7 +8,7 @@
 <li><a href="{{ url('/return') }}">Return stock</a></li>
 @endif
 
-@if(\Auth::User()->type == 'store' || 'substore')
+@if(\Auth::User()->type === 'store' || \Auth::User()->type === 'substore')
 <li><a href="{{ url('/stock') }}">Store/Stock</a></li>
 @endif
 
