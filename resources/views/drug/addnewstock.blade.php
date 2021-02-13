@@ -36,7 +36,7 @@
     				</div> -->
 
                     <div class="form-group">
-                        <label>Cost Price (Package)</label>
+                        <label>Cost Price (per unit)</label>
                         <input type="number" name="cprice" class="form-control">
                     </div>                
 

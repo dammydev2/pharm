@@ -338,7 +338,7 @@ public function enterstock(Request $request)
 {
   $request->validate([
     'name' => 'required',
-    'qty' => 'required',
+    'reorder' => 'required',
     'cprice' => 'required',
   ]);
   $chk = Store::where('name', $request['name'])
@@ -366,15 +366,13 @@ public function updatestock(Request $request)
 {
   $request->validate([
     'name' => 'required',
-    'bulk' => 'required',
     'qty' => 'required',
     'cprice' => 'required',
   ]);
   Store::where('id', $request['id'])
   ->update([
     'name' => $request['name'],
-    'bulk' => $request['bulk'],
-    'qty' => $request['qty'],
+    'qtyonhand' => $request['qty'],
     'cprice' => $request['cprice'],
   ]);
   Session::flash('success', 'Drug updated successfully');
@@ -395,26 +393,22 @@ public function stockenter(Request $request)
     'quantity' => 'required',
     'exp' => 'required',
   ]);
-  //return $request;
+  // return $request;
   Storestock::create([
     'name' => $request['name'],
     'cprice' => $request['cprice'],
     'quantity' => $request['quantity'],
     'exp' => $request['exp'],
-    'pack' => $request['qty'],
     'batch_no' => $request['batch_no'],
     'supplier_name' => $request['supplier_name'],
     'autenticate' => \Auth::User()->name,
     'type' => \Auth::User()->type,
   ]);
   $newstock = $request['quantity'] + $request['qtyonhand'];
-  $onhand = $request['qty'] * $request['quantity'] + $request['onhand'];
   Store::where('id', $request['id'])
   ->where('type', \Auth::User()->type)
   ->update([
     'qtyonhand' => $newstock,
-    'onhand' => $onhand,
-    'qty' => $request['qty'],
   ]);
   Session::flash('success', 'New stock added successfully');
   return redirect('stock');

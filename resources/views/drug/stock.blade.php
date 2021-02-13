@@ -21,9 +21,7 @@
                     </tr>
                     <tr>
                         <th>Drug Name</th>
-                        <th>Packs in Package / Pack Size</th>
                         <th>Qty in store</th>
-                        <th>Qty (Units) in packs</th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -32,15 +30,13 @@
                      @foreach($data as $row)
                     <tr>
                         <td>{{ $row->name }}</td>
-                        <td>{{ $row->qty }}</td>
                         <td>
-                            @if( ($row->onhand ) < $row->reorder)
+                            @if( ($row->qtyonhand ) < $row->reorder)
                             <span style="color: red;">
                             @endif
-                            {{ $row->qtyonhand }} X {{ $row->qty }}
+                            {{ $row->qtyonhand }} 
                             </span>
                         </td>
-                        <td>{{ number_format($row->qtyonhand * $row->qty, 0) }}</td>
                         <td><a href="{{ url('/stockadd/'.$row->id) }}">Add Stock</a></td>
                         <td><a href="{{ url('/order/'.$row->id) }}">Order</a></td>
                         <td><a href="{{ url('/stockedit/'.$row->id) }}">Edit</a></td>
