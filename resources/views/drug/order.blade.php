@@ -49,9 +49,14 @@
                         <input type="text" name="unit" class="form-control">
                     </div>
 
+                    <div class="form-group">
+                        <label>Cost Price (per unit)</label>
+                        <input type="text" name="cost_price" value="{{ $row->cprice }}" readonly class="form-control">
+                    </div>
+
                     <!-- <div class="form-group">
-                        <label>Packs in Package</label>
-                        <input type="text" name="bulk" value="{{ $row->qty }}" class="form-control">
+                        <label>Selling Price (per unit)</label>
+                        <input type="text" name="selling_price" value="" class="form-control">
                     </div> -->
 
                     <input type="hidden" name="id" value="{{ $row->id }}" >

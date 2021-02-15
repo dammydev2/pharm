@@ -439,6 +439,7 @@ public function orderenter(Request $request)
     'name' => $request['name'],
     'quantity' => $request['quantity'],
     'collector' => $request['collector'],
+    'cost_price' => $request['cost_price'],
     'collecting_unit' => $request['unit'],
     'seller' => \Auth::User()->name,
     'type' => \Auth::User()->type
