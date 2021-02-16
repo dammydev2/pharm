@@ -46,7 +46,15 @@
 
                     <div class="form-group">
                         <label>Department/Unit/Ward collecting</label>
-                        <input type="text" name="unit" class="form-control">
+                        <!-- <input type="text" name="unit" class="form-control"> -->
+                        <select name="unit" class="form-control" id="">
+                            <option>4-wing block</option>
+                            <option>Ijoga Orile</option>
+                            <option>Sub store</option>
+                            <option>Cardio unit</option>
+                            <option>In-patient</option>
+                            <option>ETR</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
