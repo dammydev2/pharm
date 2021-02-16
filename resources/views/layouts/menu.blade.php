@@ -9,7 +9,7 @@
 @endif
 
 @if(\Auth::User()->type === 'store' || \Auth::User()->type === 'substore')
-<li><a href="{{ url('/stock') }}">Store/Stock</a></li>
+<li><a href="{{ url('/stock') }}">Main Store/Stock</a></li>
 @endif
 
 @if(\Auth::User()->type == 'payment')
