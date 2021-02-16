@@ -11,6 +11,7 @@ use App\Store;
 use App\Payment;
 use App\Storestock;
 use App\Order;
+use App\DailyStock;
 use Session;
 use Hash;
 use Redirect;
@@ -326,8 +327,22 @@ public function rangesales()
 
 public function stock()
 {
+  // check if daily opening stock have been added
+  $today = date('Y-m-d');
+  $checkStock = $this->checkDailyStock($today);
+  if(!$checkStock)
+  {
+    $opening_stock = Store::whereDate('created_at', $today)->get();
+    return $opening_stock;
+    die;
+  }
   $data = Store::where('type', \Auth::User()->type)->orderBy( 'qtyonhand', 'desc')->paginate(200);
   return view('drug.stock', compact('data'));
+}
+
+private function checkDailyStock($today)
+{
+  return DailyStock::whereDate('created_at', $today)->first();
 }
 
 public function addnewstock()
