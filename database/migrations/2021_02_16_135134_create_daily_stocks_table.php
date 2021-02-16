@@ -15,6 +15,9 @@ class CreateDailyStocksTable extends Migration
     {
         Schema::create('daily_stocks', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name');
+            $table->integer('current_stock');
+            $table->double('cost_price', 15,2);
             $table->timestamps();
         });
     }
