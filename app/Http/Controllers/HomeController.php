@@ -14,6 +14,7 @@ use App\Order;
 use App\DailyStock;
 use Session;
 use Hash;
+use Illuminate\Contracts\Session\Session as SessionSession;
 use Redirect;
 
 class HomeController extends Controller
@@ -332,9 +333,16 @@ public function stock()
   $checkStock = $this->checkDailyStock($today);
   if(!$checkStock)
   {
-    $opening_stock = Store::whereDate('created_at', $today)->get();
-    return $opening_stock;
-    die;
+    // getting current stock
+    $opening_stock = Store::all();
+    // entering the current stock into daily stock
+    foreach($opening_stock as $stock){
+      DailyStock::create([
+        'name' => $stock->name,
+        'cost_price' => $stock->cprice,
+        'current_stock' => $stock->qtyonhand,
+      ]);
+    }
   }
   $data = Store::where('type', \Auth::User()->type)->orderBy( 'qtyonhand', 'desc')->paginate(200);
   return view('drug.stock', compact('data'));
@@ -662,6 +670,54 @@ public function updateworker(Request $request)
             'type' => $request['type']
         ]);
   return redirect('worker');
+}
+
+public function stockReport()
+{
+  return view('report.stockReport');
+}
+
+public function checkStockReport(Request $request)
+{
+  $request->validate([
+    'start_date' => 'required',
+    'end_date' => 'required',
+  ]);
+  Session::put('dates', $request->all());
+  return redirect('getStockReport');
+}
+
+public function getStockReport()
+{
+  $dates = Session::get('dates');
+  // adding a day to the end date
+  $endDate = $this->addADay($dates['end_date']);
+
+  // checking if there is a closing stock at the end date
+  $closing_stock = DailyStock::whereDate('created_at', $endDate)->first();
+  if(!$closing_stock){
+    Session::flash('error', 'there is no closing stock on the selected date');
+    return redirect('stockReport');
+  }
+  
+  $stocks = DailyStock::whereDate('created_at', '>=', $dates['start_date'])
+  ->whereDate('created_at', '<=', $endDate)->orderBy('created_at', 'asc')->get();
+  // closing stock
+  $closing_stocks = DailyStock::whereDate('created_at', $endDate)->get();
+$closingStockTotal = 0;
+  foreach($closing_stocks as $closing_stock){
+    $subTotal = $closing_stock->current_stock * $closing_stock->cost_price;
+    $closingStockTotal += $subTotal;
+  }
+  return $closingStockTotal;
+  return view('report.getStockReport')->with('stocks', $stocks);
+}
+
+private function addADay($date)
+{
+  $daystosum = 1;
+  $datesum = date('Y-m-d', strtotime($date.' + '.$daystosum.' days'));
+    return $datesum;
 }
 
 
