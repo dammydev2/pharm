@@ -332,9 +332,16 @@ public function stock()
   $checkStock = $this->checkDailyStock($today);
   if(!$checkStock)
   {
-    $opening_stock = Store::whereDate('created_at', $today)->get();
-    return $opening_stock;
-    die;
+    // getting current stock
+    $opening_stock = Store::all();
+    // entering the current stock into daily stock
+    foreach($opening_stock as $stock){
+      DailyStock::create([
+        'name' => $stock->name,
+        'cost_price' => $stock->cprice,
+        'current_stock' => $stock->qtyonhand,
+      ]);
+    }
   }
   $data = Store::where('type', \Auth::User()->type)->orderBy( 'qtyonhand', 'desc')->paginate(200);
   return view('drug.stock', compact('data'));
