@@ -3,40 +3,38 @@
 @section('content')
 <div class="container">
     <div class="row">
-    @if(Session::has('error'))
-    <div class="alert alert-danger">{{ Session::get('error') }}</div>
-    @endif
+        @if(Session::has('error'))
+        <div class="alert alert-danger">{{ Session::get('error') }}</div>
+        @endif
 
-        <div class="col-md-12 space"></div>
-        <div class="col-md-4"></div>
-        <div class="panel panel-primary col-sm-4">
+        <div class="panel panel-primary col-sm-10">
             <div class="panel-heading">Stock Report</div>
             <div class="panel-body">
 
-                <form method="post" action="{{ url('/checkStockReport') }}">
-                    {{ csrf_field() }}
-
-                    @if ($errors->any())
-                    <div class="alert alert-danger">
-                        @foreach ($errors->all() as $error)
-                        <li>{{$error}}</li>
-                        @endforeach
-                    </div>
-                    @endif
-
-                    <div class="form-group">
-                        <label>Start Date</label>
-                        <input type="date" name="start_date" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <label>End Date</label>
-                        <input type="date" name="end_date" class="form-control">
-                    </div>
-
-                    <input type="submit" name="submit" value="view" class="btn btn-primary">
-
-                </form>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>date</th>
+                        <th>name</th>
+                        <th>stock</th>
+                        <th>cost price</th>
+                        <th>total</th>
+                    </tr>
+                    <?php $totalStockSales = 0; ?>
+                    @foreach($stocks as $stock)
+                    <tr>
+                        <td>{{ $stock->created_at->toDateString() }}</td>
+                        <td>{{ $stock->name }}</td>
+                        <td>{{ $stock->current_stock }}</td>
+                        <td>{{ $stock->cost_price }}</td>
+                        <td>{{ $sub_total = ($stock->cost_price * $stock->current_stock) }}</td>
+                        <?php $totalStockSales += $sub_total ?>
+                    </tr>
+                    @endforeach
+                    <tr>
+                        <th colspan="4" class="text-right">GRAND TOTAL</th>
+                        <th>{{ number_format($totalStockSales, 2) }}</th>
+                    </tr>
+                </table>
 
             </div>
         </div>

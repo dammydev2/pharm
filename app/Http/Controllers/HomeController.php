@@ -701,7 +701,15 @@ public function getStockReport()
   }
   
   $stocks = DailyStock::whereDate('created_at', '>=', $dates['start_date'])
-  ->whereDate('created_at', '<=', $endDate)->orderBy('name', 'asc')->get();
+  ->whereDate('created_at', '<=', $endDate)->orderBy('created_at', 'asc')->get();
+  // closing stock
+  $closing_stocks = DailyStock::whereDate('created_at', $endDate)->get();
+$closingStockTotal = 0;
+  foreach($closing_stocks as $closing_stock){
+    $subTotal = $closing_stock->current_stock * $closing_stock->cost_price;
+    $closingStockTotal += $subTotal;
+  }
+  return $closingStockTotal;
   return view('report.getStockReport')->with('stocks', $stocks);
 }
 
