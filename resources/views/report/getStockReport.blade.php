@@ -11,30 +11,58 @@
             <div class="panel-heading">Stock Report</div>
             <div class="panel-body">
 
-                <table class="table table-bordered">
-                    <tr>
-                        <th>date</th>
-                        <th>name</th>
-                        <th>stock</th>
-                        <th>cost price</th>
-                        <th>total</th>
-                    </tr>
-                    <?php $totalStockSales = 0; ?>
-                    @foreach($stocks as $stock)
-                    <tr>
-                        <td>{{ $stock->created_at->toDateString() }}</td>
-                        <td>{{ $stock->name }}</td>
-                        <td>{{ $stock->current_stock }}</td>
-                        <td>{{ $stock->cost_price }}</td>
-                        <td>{{ $sub_total = ($stock->cost_price * $stock->current_stock) }}</td>
-                        <?php $totalStockSales += $sub_total ?>
-                    </tr>
-                    @endforeach
-                    <tr>
-                        <th colspan="4" class="text-right">GRAND TOTAL</th>
-                        <th>{{ number_format($totalStockSales, 2) }}</th>
-                    </tr>
-                </table>
+                <?php $dates = Session::get('dates') ?>
+
+                <ul class="list-group">
+                    <li class="list-group-item">TOTAL STOCK <span class="badge">12</span></li>
+                    <li class="list-group-item">CLOSING STOCK <span class="badge">5</span></li>
+                    <li class="list-group-item">TOTAL SALES <span class="badge">3</span></li>
+                </ul>
+
+                <button data-toggle="collapse" class="btn btn-primary btn-block" data-target="#demo">Show Stock Details</button>
+
+                <div id="demo" class="collapse">
+                    <div class="col-md-5">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th colspan="3" class="text-center">Opening Stock for {{ $dates['start_date'] }}</th>
+                            </tr>
+                            <tr>
+                                <th>drug</th>
+                                <th>stock</th>
+                                <th>cost price</th>
+                            </tr>
+                            @foreach($data['opening_stock'] as $stock)
+                            <tr>
+                                <td>{{ $stock->name }}</td>
+                                <td>{{ $stock->current_stock }}</td>
+                                <td class="text-right">{{ number_format($stock->cost_price, 2) }}</td>
+                            </tr>
+                            @endforeach
+                        </table>
+                    </div>
+
+                    <div class="col-md-1"></div>
+                    <div class="col-md-6">
+                        <table class="table table-striped">
+                            <tr>
+                                <th>drug</th>
+                                <th>quantity</th>
+                                <th>collecting unit</th>
+                                <th>cost price</th>
+                            </tr>
+                            @foreach($data['sales'] as $sales)
+                            <tr>
+                                <td>{{ $sales->name }}</td>
+                                <td>{{ $sales->quantity }}</td>
+                                <td>{{ $sales->collecting_unit }}</td>
+                                <td>{{ $sales->cost_price }}</td>
+                            </tr>
+                            @endforeach
+                        </table>
+                    </div>
+
+                </div>
 
             </div>
         </div>
@@ -45,6 +73,10 @@
 <style>
     .space {
         height: 170px;
+    }
+
+    .text-underline {
+        border-bottom: 3px double #000000;
     }
 </style>
 @endsection
