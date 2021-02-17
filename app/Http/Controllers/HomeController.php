@@ -14,6 +14,7 @@ use App\Order;
 use App\DailyStock;
 use Session;
 use Hash;
+use Illuminate\Contracts\Session\Session as SessionSession;
 use Redirect;
 
 class HomeController extends Controller
@@ -669,6 +670,46 @@ public function updateworker(Request $request)
             'type' => $request['type']
         ]);
   return redirect('worker');
+}
+
+public function stockReport()
+{
+  return view('report.stockReport');
+}
+
+public function checkStockReport(Request $request)
+{
+  $request->validate([
+    'start_date' => 'required',
+    'end_date' => 'required',
+  ]);
+  Session::put('dates', $request->all());
+  return redirect('getStockReport');
+}
+
+public function getStockReport()
+{
+  $dates = Session::get('dates');
+  // adding a day to the end date
+  $endDate = $this->addADay($dates['end_date']);
+
+  // checking if there is a closing stock at the end date
+  $closing_stock = DailyStock::whereDate('created_at', $endDate)->first();
+  if(!$closing_stock){
+    Session::flash('error', 'there is no closing stock on the selected date');
+    return redirect('stockReport');
+  }
+  
+  $stocks = DailyStock::whereDate('created_at', '>=', $dates['start_date'])
+  ->whereDate('created_at', '<=', $endDate)->orderBy('name', 'asc')->get();
+  return view('report.getStockReport')->with('stocks', $stocks);
+}
+
+private function addADay($date)
+{
+  $daystosum = 1;
+  $datesum = date('Y-m-d', strtotime($date.' + '.$daystosum.' days'));
+    return $datesum;
 }
 
 
