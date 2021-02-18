@@ -737,7 +737,8 @@ class HomeController extends Controller
     // $result = Order::groupBy('name')->select('name', 'collector', 'cost_price', 'collecting_unit', 'quantity')
     //   ->sum('quantity');
 
-    $consumptions = DB::select('SELECT collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders GROUP BY name ORDER BY id ASC');
+    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders GROUP BY name ORDER BY id ASC');
+    $consumptions = json_decode(json_encode($consumptions), true);
 
     return view('report.getMonthlyConsumption')->with('consumptions', $consumptions);
 

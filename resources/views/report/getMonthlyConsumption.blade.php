@@ -13,17 +13,22 @@
 
                 <?php $dates = Session::get('dates') ?>
 
-                
-<?php
 
-$bankTotals[] = array();
-foreach($consumptions as $amount)
-{
-  $bankTotals[$amount['name']] += $amount['amount'];
-}
+                <table class="table table-striped">
+                    <tr>
+                        <th>drug</th>
+                        <th>quantity</th>
+                        <th>cost_price</th>
+                    </tr>
+                    @foreach($consumptions as $key => $consumption)
+                    <tr>
+                        <th>{{ $consumption['name'] }}</th>
+                        <th>{{ $consumption['SUM(quantity)'] }}</th>
+                        <th>{{ $consumption['cost_price'] }}</th>
+                    </tr>
+                    @endforeach
+                </table>
 
-?>
-                
 
             </div>
         </div>
@@ -41,7 +46,7 @@ foreach($consumptions as $amount)
         border-bottom: 3px double #000000;
     }
 
-    .badge{
+    .badge {
         font-size: 20px;
     }
 </style>
