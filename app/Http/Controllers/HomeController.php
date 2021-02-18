@@ -15,7 +15,9 @@ use App\DailyStock;
 use Session;
 use Hash;
 use Illuminate\Contracts\Session\Session as SessionSession;
+use Illuminate\Support\Facades\Session as FacadesSession;
 use Redirect;
+use SebastianBergmann\CodeCoverage\Report\Xml\Report;
 
 class HomeController extends Controller
 {
@@ -717,4 +719,37 @@ class HomeController extends Controller
     return view('report.monthlyConsumption');
   }
 
+  public function checkMonthReport(Request $request)
+  {
+    $request->validate([
+      'month' => 'required',
+      'year' => 'required',
+    ]);
+    Session::put('selection', $request->all());
+    return redirect('getMonthlyConsumption');
+  }
+
+  public function getMonthlyConsumption()
+  {
+    $selection = Session::get('selection');
+    $consumptions = Order::whereMonth('created_at', $selection['month'])
+      ->whereYear('created_at', $selection['year'])->get();
+
+      $sum_array = [];
+      foreach($consumptions as $item) {
+          if (key_exists($item['name'], $sum_array)) {
+              $sum_array[$item['name']] += $item['quantity'];
+          } else {
+              $sum_array[$item['name']] = $item['quantity'];
+          }
+      }
+      
+      $final_array = [];
+      foreach($sum_array as $key => $value) {
+          $final_array[] = ['name' => $key, 'quantity' => $value, ];
+      }
+return $final_array;
+
+    // return view('report.getMonthlyConsumption')->with('consumptions', $consumptions);
+  }
 }
