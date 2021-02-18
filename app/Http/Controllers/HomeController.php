@@ -13,6 +13,7 @@ use App\Storestock;
 use App\Order;
 use App\DailyStock;
 use Session;
+use DB;
 use Hash;
 use Illuminate\Contracts\Session\Session as SessionSession;
 use Illuminate\Support\Facades\Session as FacadesSession;
@@ -732,23 +733,33 @@ class HomeController extends Controller
   public function getMonthlyConsumption()
   {
     $selection = Session::get('selection');
-    $consumptions = Order::whereMonth('created_at', $selection['month'])
-      ->whereYear('created_at', $selection['year'])->get();
 
-      $sum_array = [];
-      foreach($consumptions as $item) {
-          if (key_exists($item['name'], $sum_array)) {
-              $sum_array[$item['name']] += $item['quantity'];
-          } else {
-              $sum_array[$item['name']] = $item['quantity'];
-          }
-      }
-      
-      $final_array = [];
-      foreach($sum_array as $key => $value) {
-          $final_array[] = ['name' => $key, 'quantity' => $value, ];
-      }
-return $final_array;
+    // $result = Order::groupBy('name')->select('name', 'collector', 'cost_price', 'collecting_unit', 'quantity')
+    //   ->sum('quantity');
+
+    $consumptions = DB::select('SELECT collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders GROUP BY name ORDER BY id ASC');
+
+    return view('report.getMonthlyConsumption')->with('consumptions', $consumptions);
+
+
+    //     $consumptions = Order::whereMonth('created_at', $selection['month'])
+    //       ->whereYear('created_at', $selection['year'])->get();
+
+    //       $sum_array = [];
+    //       foreach($consumptions as $item) {
+    //           if (key_exists($item['name'], $sum_array)) {
+    //               $sum_array[$item['name']] += $item['quantity'];
+    //           } else {
+    //               $sum_array[$item['name']] = $item['quantity'];
+    //           }
+    //       }
+
+    //       $final_array = [];
+    //       foreach($sum_array as $key => $value) {
+    //         return $sum_array;
+    //           $final_array[] = ['name' => $key, 'quantity' => $value, ];
+    //       }
+    // return $final_array;
 
     // return view('report.getMonthlyConsumption')->with('consumptions', $consumptions);
   }
