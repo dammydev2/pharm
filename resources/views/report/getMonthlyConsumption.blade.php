@@ -23,8 +23,11 @@
                     <tr>
                         <th>s/n</th>
                         <th>drug</th>
-                        <th>unit</th>
+                        <th>unit sold</th>
                         <th>unit price</th>
+                        <th>month sales</th>
+                        <th>yearly unit consumption</th>
+                        <th>yearly budget</th>
                     </tr>
                     @foreach($consumptions as $key => $consumption)
                     <tr>
@@ -32,6 +35,9 @@
                         <th>{{ $consumption['name'] }}</th>
                         <th>{{ $consumption['SUM(quantity)'] }}</th>
                         <th>{{ $consumption['cost_price'] }}</th>
+                        <th class="text-right">{{ number_format($consumption['cost_price'] * $consumption['SUM(quantity)'], 2) }}</th>
+                        <th class="text-right"> 12 * {{ $consumption['SUM(quantity)'] }}</th>
+                        <th class="text-right">{{ 12 * $consumption['SUM(quantity)'] }}</th>
                     </tr>
                     @endforeach
                 </table>

@@ -272,6 +272,7 @@ class HomeController extends Controller
       'sprice' => $request['sprice'],
       'amount' => $request['amount'],
       'balance' => $request['balance'],
+      'status' => $request['status'],
       'seller' => \Auth::User()->name,
     ]);
     return redirect('receipt');
@@ -368,6 +369,11 @@ class HomeController extends Controller
       'reorder' => $request['reorder'],
       'type' => \Auth::User()->type,
     ]);
+    DailyStock::create([
+      'name' => $request['name'],
+      'cost_price' => $request['cprice'],
+      'current_stock' => 0
+    ]);
     Session::flash('success', 'Drug added successfully');
     return redirect('stock');
   }
@@ -426,6 +432,15 @@ class HomeController extends Controller
       ->update([
         'qtyonhand' => $newstock,
       ]);
+    // adding it to daily stock
+    $getDrug = DailyStock::where('name', $request['name'])->first();
+    $currentStock = $getDrug->current_stock;
+    $newStock = $currentStock + $request['quantity'];
+    // updating the newstock
+    DailyStock::where('name', $request['name'])
+    ->update([
+      'current_stock' => $newStock
+    ]);
     Session::flash('success', 'New stock added successfully');
     return redirect('stock');
   }
@@ -740,7 +755,7 @@ class HomeController extends Controller
     // $result = Order::groupBy('name')->select('name', 'collector', 'cost_price', 'collecting_unit', 'quantity')
     //   ->sum('quantity');
 
-    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders WHERE MONTH(created_at) = '.$month.' && YEAR(created_at) = '.$year.' GROUP BY name ORDER BY id ASC');
+    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders WHERE MONTH(created_at) = ' . $month . ' && YEAR(created_at) = ' . $year . ' GROUP BY name ORDER BY id ASC');
     $consumptions = json_decode(json_encode($consumptions), true);
 
     return view('report.getMonthlyConsumption')->with('consumptions', $consumptions)->with('sn', 1);
