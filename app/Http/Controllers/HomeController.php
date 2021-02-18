@@ -691,7 +691,7 @@ class HomeController extends Controller
 
     // getting sales
     $data['sales'] = Order::whereDate('created_at', '>=', $dates['start_date'])
-      ->whereDate('created_at', '<=', $dates['end_date'])->get();
+      ->whereDate('created_at', '<=', $dates['end_date'])->orderBy('created_at', 'asc')->get();
 
     // $stocks = DailyStock::whereDate('created_at', '>=', $dates['start_date'])
     //   ->whereDate('created_at', '<=', $endDate)->orderBy('created_at', 'asc')->get();
@@ -711,4 +711,10 @@ class HomeController extends Controller
     $datesum = date('Y-m-d', strtotime($date . ' + ' . $daystosum . ' days'));
     return $datesum;
   }
+
+  public function monthlyConsumption()
+  {
+    return view('report.monthlyConsumption');
+  }
+
 }

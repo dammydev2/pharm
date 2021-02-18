@@ -27,6 +27,7 @@ Route::get('/home', 'HomeController@index');
 Route::get('/worker', 'HomeController@worker');
 Route::get('/stockReport', 'HomeController@stockReport');
 Route::get('/getStockReport', 'HomeController@getStockReport');
+Route::get('/monthlyConsumption', 'HomeController@monthlyConsumption');
 Route::post('/checkStockReport', 'HomeController@checkStockReport');
 
 Route::get('/addworker', 'HomeController@addworker');

@@ -12,7 +12,7 @@ $factory->define(Order::class, function (Faker $faker) {
     $endingDate   = $faker->dateTimeBetween($startingDate, strtotime('+14 days'));
 
     return [
-        'name' => $faker->name,
+        'name' => $faker->company,
         'quantity' => $faker->randomFloat(1, 3000, 0),
         'collector' => $faker->name,
         'seller' => 'store',
