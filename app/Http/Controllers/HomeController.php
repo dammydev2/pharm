@@ -691,7 +691,7 @@ class HomeController extends Controller
 
     // getting sales
     $data['sales'] = Order::whereDate('created_at', '>=', $dates['start_date'])
-      ->whereDate('created_at', '<=', $dates['end_date'])->get();
+      ->whereDate('created_at', '<=', $dates['end_date'])->orderBy('created_at', 'asc')->get();
 
     // $stocks = DailyStock::whereDate('created_at', '>=', $dates['start_date'])
     //   ->whereDate('created_at', '<=', $endDate)->orderBy('created_at', 'asc')->get();

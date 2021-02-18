@@ -11,6 +11,7 @@
 @if(\Auth::User()->type === 'store' || \Auth::User()->type === 'substore')
 <li><a href="{{ url('/stock') }}">Main Store/Stock</a></li>
 <li><a href="{{ url('/stockReport') }}">Stock Report</a></li>
+<li><a href="{{ url('/monthlyConsumption') }}">Monthly Consumption</a></li>
 @endif
 
 @if(\Auth::User()->type == 'payment')
