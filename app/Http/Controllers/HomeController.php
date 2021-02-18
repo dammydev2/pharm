@@ -272,6 +272,7 @@ class HomeController extends Controller
       'sprice' => $request['sprice'],
       'amount' => $request['amount'],
       'balance' => $request['balance'],
+      'status' => $request['status'],
       'seller' => \Auth::User()->name,
     ]);
     return redirect('receipt');

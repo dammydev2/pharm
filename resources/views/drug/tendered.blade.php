@@ -57,6 +57,15 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Status</label>
+                        <select name="status" class="form-control" id="">
+                            <option>normal</option>
+                            <option>Unclaimed waiver</option>
+                            <option>retainership</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label>Amount tendered</label>
                         <input type="number" id="a1" onkeyup="calculate()" name="amount" class="form-control">
                     </div>
