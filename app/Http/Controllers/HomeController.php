@@ -711,4 +711,10 @@ class HomeController extends Controller
     $datesum = date('Y-m-d', strtotime($date . ' + ' . $daystosum . ' days'));
     return $datesum;
   }
+
+  public function monthlyConsumption()
+  {
+    return view('report.monthlyConsumption');
+  }
+
 }
