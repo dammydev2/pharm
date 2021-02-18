@@ -733,14 +733,17 @@ class HomeController extends Controller
   public function getMonthlyConsumption()
   {
     $selection = Session::get('selection');
+    $month = $selection['month'];
+    $year = $selection['year'];
+    // return $month;
 
     // $result = Order::groupBy('name')->select('name', 'collector', 'cost_price', 'collecting_unit', 'quantity')
     //   ->sum('quantity');
 
-    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders GROUP BY name ORDER BY id ASC');
+    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders WHERE MONTH(created_at) = '.$month.' && YEAR(created_at) = '.$year.' GROUP BY name ORDER BY id ASC');
     $consumptions = json_decode(json_encode($consumptions), true);
 
-    return view('report.getMonthlyConsumption')->with('consumptions', $consumptions);
+    return view('report.getMonthlyConsumption')->with('consumptions', $consumptions)->with('sn', 1);
 
 
     //     $consumptions = Order::whereMonth('created_at', $selection['month'])

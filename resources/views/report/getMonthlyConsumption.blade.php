@@ -7,21 +7,28 @@
         <div class="alert alert-danger">{{ Session::get('error') }}</div>
         @endif
 
+        <?php
+        $date = Session::get('selection');
+        $dateObj   = DateTime::createFromFormat('!m', $date['month']);
+        $monthName = $dateObj->format('F'); // March
+        ?>
         <div class="panel panel-primary col-sm-11">
-            <div class="panel-heading">Monthly COnsumptions Report</div>
+            <div class="panel-heading">Monthly Consumptions Report for {{ $monthName.' '.$date['year'] }}</div>
             <div class="panel-body">
 
-                <?php $dates = Session::get('dates') ?>
+
 
 
                 <table class="table table-striped">
                     <tr>
+                        <th>s/n</th>
                         <th>drug</th>
-                        <th>quantity</th>
-                        <th>cost_price</th>
+                        <th>unit</th>
+                        <th>unit price</th>
                     </tr>
                     @foreach($consumptions as $key => $consumption)
                     <tr>
+                        <td>{{ $sn++ }}</td>
                         <th>{{ $consumption['name'] }}</th>
                         <th>{{ $consumption['SUM(quantity)'] }}</th>
                         <th>{{ $consumption['cost_price'] }}</th>
