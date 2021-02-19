@@ -30,7 +30,7 @@
     				</div>
 
                     <div class="form-group">
-                        <label>Quantity in store</label>
+                        <label>Quantity in store (unit)</label>
                         <input type="number" name="qtyonhand" value="{{ $row->qtyonhand }}" readonly="" class="form-control">
                     </div>
 
@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Collector</label>
+                        <label>Collector's Name</label>
                         <input type="text" name="collector" class="form-control">
                     </div>
 
