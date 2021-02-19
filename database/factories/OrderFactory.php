@@ -19,6 +19,6 @@ $factory->define(Order::class, function (Faker $faker) {
         'type' => 'store',
         'collecting_unit' => $faker->randomElement(['4-wing block', 'Ijoga Orile', 'Sub store', 'Cardio unit', 'In-patient', 'ETR']),
         'cost_price' => $faker->randomFloat(50, 3000, 2),
-        'created_at' => $endingDate,
+        'created_at' => "2021-02-18",
     ];
 });
