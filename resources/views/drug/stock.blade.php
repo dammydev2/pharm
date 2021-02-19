@@ -21,7 +21,7 @@
                     </tr>
                     <tr>
                         <th>Drug Name</th>
-                        <th>Qty in store</th>
+                        <th>Qty in store (units)</th>
                         <th></th>
                         <th></th>
                         <th></th>
