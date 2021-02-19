@@ -48,8 +48,8 @@
                             <tr>
                                 <th>date collected</th>
                                 <th>drug</th>
-                                <th>quantity</th>
-                                <th>collecting unit</th>
+                                <th>quantity (unit)</th>
+                                <th>collecting unit/ dept.</th>
                                 <th>unit cost price</th>
                             </tr>
                             <?php $total_sales = 0; ?>
