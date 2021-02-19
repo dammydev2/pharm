@@ -29,6 +29,7 @@ Route::get('/stockReport', 'HomeController@stockReport');
 Route::get('/getStockReport', 'HomeController@getStockReport');
 Route::get('/monthlyConsumption', 'HomeController@monthlyConsumption');
 Route::get('/getMonthlyConsumption', 'HomeController@getMonthlyConsumption');
+Route::get('/deptStockReport', 'HomeController@deptStockReport');
 Route::post('/checkStockReport', 'HomeController@checkStockReport');
 Route::post('/checkMonthReport', 'HomeController@checkMonthReport');
 

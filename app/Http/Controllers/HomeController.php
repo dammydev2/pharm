@@ -760,26 +760,13 @@ class HomeController extends Controller
 
     return view('report.getMonthlyConsumption')->with('consumptions', $consumptions)->with('sn', 1);
 
+ }
 
-    //     $consumptions = Order::whereMonth('created_at', $selection['month'])
-    //       ->whereYear('created_at', $selection['year'])->get();
+ public function deptStockReport()
+ {
+   $departments = Order::groupBy('collecting_unit')->get();
+   return view('report.deptStockReport')->with('departments', $departments);
+ }
 
-    //       $sum_array = [];
-    //       foreach($consumptions as $item) {
-    //           if (key_exists($item['name'], $sum_array)) {
-    //               $sum_array[$item['name']] += $item['quantity'];
-    //           } else {
-    //               $sum_array[$item['name']] = $item['quantity'];
-    //           }
-    //       }
 
-    //       $final_array = [];
-    //       foreach($sum_array as $key => $value) {
-    //         return $sum_array;
-    //           $final_array[] = ['name' => $key, 'quantity' => $value, ];
-    //       }
-    // return $final_array;
-
-    // return view('report.getMonthlyConsumption')->with('consumptions', $consumptions);
-  }
 }
