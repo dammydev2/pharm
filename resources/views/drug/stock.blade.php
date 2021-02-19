@@ -34,7 +34,7 @@
                             @if( ($row->qtyonhand ) < $row->reorder)
                             <span style="color: red;">
                             @endif
-                            {{ number_format($row->qtyonhand, 2) }} 
+                            {{ number_format($row->qtyonhand, 0) }} 
                             </span>
                         </td>
                         <td><a href="{{ url('/stockadd/'.$row->id) }}">Add Stock</a></td>
