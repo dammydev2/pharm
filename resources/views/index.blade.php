@@ -29,10 +29,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <body onload="document.frm1.submit()">
 	<div class="padding-all">
 		<div class="header">
-			<h1>Master  Login Form</h1>
+			<h1><span style="color: rgba(200, 50, 50, 0.9);"> Pharmacy  Logi</span>n Form</h1>
 		</div>
 
-		<div class="design-w3l">
+		<div class="design-w3l" style="background-color: rgba(200, 50, 50, 0.5);">
 			<div class="mail-form-agile">
 				<form method="post" action="{{ url('/login') }}" id="frm1">
 					{{ csrf_field() }}
@@ -44,7 +44,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 @endif
 					<input type="text" name="email"  placeholder="User Name  or  email..." required=""/>
 					<input type="password"  name="password" class="padding" placeholder="Password" required=""/>
-					<input type="submit" value="login">
+					<input type="submit" style="background-color: rgba(200, 50, 50, 0.9);" value="login">
 				</form>
 			</div>
 		  <div class="clear"> </div>
