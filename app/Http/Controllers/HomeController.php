@@ -824,4 +824,36 @@ class HomeController extends Controller
   
   }
 
+  public function singleMonth()
+  {
+    return view('report.singleMonth');
+  }
+
+  public function checkSingleMonth(Request $request)
+  {
+    $request->validate([
+      'month' => 'required',
+      'year' => 'required',
+    ]);
+    Session::put('selection', $request->all());
+    return redirect('getSingleConsumption');
+  }
+
+  public function getSingleConsumption()
+  {
+    $selection = Session::get('selection');
+    $month = $selection['month'];
+    $year = $selection['year'];
+    // return $month;
+
+    // $result = Order::groupBy('name')->select('name', 'collector', 'cost_price', 'collecting_unit', 'quantity')
+    //   ->sum('quantity');
+
+    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders WHERE MONTH(created_at) = ' . $month . ' && YEAR(created_at) = ' . $year . ' GROUP BY name ORDER BY id ASC');
+    $consumptions = json_decode(json_encode($consumptions), true);
+
+    return view('report.getSingleConsumption')->with('consumptions', $consumptions)->with('sn', 1);
+  
+  }
+
 }
