@@ -13,6 +13,7 @@
 <li><a href="{{ url('/stockReport') }}">Stock Report</a></li>
 <li><a href="{{ url('/monthlyConsumption') }}">Monthly Consumption</a></li>
 <li><a href="{{ url('/deptStockReport') }}">Stock report by department</a></li>
+<li><a href="{{ url('/multipleMonths') }}">Multiple months consuption</a></li>
 @endif
 
 @if(\Auth::User()->type == 'payment')

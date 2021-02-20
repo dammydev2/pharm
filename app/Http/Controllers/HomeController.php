@@ -786,4 +786,9 @@ class HomeController extends Controller
     ->orderBy('created_at', 'asc')->get();
     return view('report.getDeptStockReport')->with('orders', $orders)->with('sn',1);
   }
+
+  public function multipleMonths()
+  {
+    return view('report.multipleMonths');
+  }
 }
