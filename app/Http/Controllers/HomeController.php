@@ -782,7 +782,13 @@ class HomeController extends Controller
     $request = Session::get('request');
     $orders = Order::where('collecting_unit', $request['department'])
     ->whereDate('created_at', '>=', $request['start_date'])
-    ->whereDate('created_at', '<=', $request['end_date'])->get();
-    return $orders;
+    ->whereDate('created_at', '<=', $request['end_date'])
+    ->orderBy('created_at', 'asc')->get();
+    return view('report.getDeptStockReport')->with('orders', $orders)->with('sn',1);
+  }
+
+  public function multipleMonths()
+  {
+    return view('report.multipleMonths');
   }
 }
