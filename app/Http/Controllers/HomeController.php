@@ -799,6 +799,21 @@ class HomeController extends Controller
       'end_month' => 'required|integer|gt:start_month',
       'year' => 'required'
     ]);
+    Session::put('request', $request->all());
+    return redirect('getMultipleReport');
+  }
+
+  public function getMultipleReport()
+  {
+    $request = Session::get('request');
+    $start_month = $request['start_month'];
+    $end_month = $request['end_month'];
+    $year = $request['year'];
+    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders WHERE MONTH(created_at) >= ' . $start_month .' AND MONTH(created_at) <= ' . $end_month . ' && YEAR(created_at) = ' . $year . ' GROUP BY name ORDER BY id ASC');
+    $consumptions = json_decode(json_encode($consumptions), true);
+    
+    return view('report.getMultipleReport')->with('consumptions', $consumptions)->with('sn', 1);
+  
   }
 
 }
