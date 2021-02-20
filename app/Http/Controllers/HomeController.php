@@ -561,9 +561,17 @@ class HomeController extends Controller
     $date = Session::get('date');
     $date2 = Session::get('date2');
     $stat = Session::get('stat');
+    if($stat === 'nil' || $stat === 'nhis'){
     $data = Payment::where('created_at', '>=', $date)
       ->where('created_at', '<=', $date2)
-      ->where('nhis', $stat)->paginate(25);
+      ->where('nhis', $stat)
+      ->where('status', 'normal')->paginate(25);
+    }
+    if($stat === 'Unclaimed waiver' || $stat === 'retainership'){
+      $data = Payment::where('created_at', '>=', $date)
+        ->where('created_at', '<=', $date2)
+        ->where('status', $stat)->paginate(25);
+      }
     if ($stat == 'nil') {
       Session::put('info', 'non-NHIS');
     } else {
@@ -791,4 +799,29 @@ class HomeController extends Controller
   {
     return view('report.multipleMonths');
   }
+
+  public function checkMultipleReport(Request $request)
+  {
+    $request->validate([
+      'start_month' => 'required|integer',
+      'end_month' => 'required|integer|gt:start_month',
+      'year' => 'required'
+    ]);
+    Session::put('request', $request->all());
+    return redirect('getMultipleReport');
+  }
+
+  public function getMultipleReport()
+  {
+    $request = Session::get('request');
+    $start_month = $request['start_month'];
+    $end_month = $request['end_month'];
+    $year = $request['year'];
+    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders WHERE MONTH(created_at) >= ' . $start_month .' AND MONTH(created_at) <= ' . $end_month . ' && YEAR(created_at) = ' . $year . ' GROUP BY name ORDER BY id ASC');
+    $consumptions = json_decode(json_encode($consumptions), true);
+    
+    return view('report.getMultipleReport')->with('consumptions', $consumptions)->with('sn', 1);
+  
+  }
+
 }

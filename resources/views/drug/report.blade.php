@@ -35,6 +35,8 @@
                             <option>Select Type</option>
                             <option value="nil">Non NHIS</option>
                             <option value="nhis">NHIS</option>
+                            <option value="Unclaimed waiver">Unclaimed waiver</option>
+                            <option value="retainership">Retainership</option>
                         </select>
                     </div>
 
