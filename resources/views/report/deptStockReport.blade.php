@@ -13,7 +13,7 @@
             <div class="panel-heading">Department Stock Report</div>
             <div class="panel-body">
 
-                <form method="post" action="{{ url('/checkStockReport') }}">
+                <form method="post" action="{{ url('/checkDeptStockReport') }}">
                     {{ csrf_field() }}
 
                     @if ($errors->any())
@@ -26,7 +26,7 @@
 
                     <div class="form-group">
                         <label for="">Departmrnt</label>
-                        <select name="departmrnt" class="form-control" id="">
+                        <select name="department" class="form-control" id="">
                             @foreach($departments as $department)
                             <option>{{ $department->collecting_unit }}</option>
                             @endforeach
