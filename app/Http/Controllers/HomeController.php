@@ -438,9 +438,9 @@ class HomeController extends Controller
     $newStock = $currentStock + $request['quantity'];
     // updating the newstock
     DailyStock::where('name', $request['name'])
-    ->update([
-      'current_stock' => $newStock
-    ]);
+      ->update([
+        'current_stock' => $newStock
+      ]);
     Session::flash('success', 'New stock added successfully');
     return redirect('stock');
   }
@@ -759,27 +759,30 @@ class HomeController extends Controller
     $consumptions = json_decode(json_encode($consumptions), true);
 
     return view('report.getMonthlyConsumption')->with('consumptions', $consumptions)->with('sn', 1);
+  }
 
+  public function deptStockReport()
+  {
+    $departments = Order::groupBy('collecting_unit')->get();
+    return view('report.deptStockReport')->with('departments', $departments);
+  }
 
-    //     $consumptions = Order::whereMonth('created_at', $selection['month'])
-    //       ->whereYear('created_at', $selection['year'])->get();
+  public function checkDeptStockReport(Request $request)
+  {
+    $request->validate([
+      'start_date' => 'required',
+      'end_date' => 'required',
+    ]);
+    Session::put('request', $request->all());
+    return redirect('getDeptStockReport');
+  }
 
-    //       $sum_array = [];
-    //       foreach($consumptions as $item) {
-    //           if (key_exists($item['name'], $sum_array)) {
-    //               $sum_array[$item['name']] += $item['quantity'];
-    //           } else {
-    //               $sum_array[$item['name']] = $item['quantity'];
-    //           }
-    //       }
-
-    //       $final_array = [];
-    //       foreach($sum_array as $key => $value) {
-    //         return $sum_array;
-    //           $final_array[] = ['name' => $key, 'quantity' => $value, ];
-    //       }
-    // return $final_array;
-
-    // return view('report.getMonthlyConsumption')->with('consumptions', $consumptions);
+  public function getDeptStockReport()
+  {
+    $request = Session::get('request');
+    $orders = Order::where('collecting_unit', $request['department'])
+    ->whereDate('created_at', '>=', $request['start_date'])
+    ->whereDate('created_at', '<=', $request['end_date'])->get();
+    return $orders;
   }
 }
