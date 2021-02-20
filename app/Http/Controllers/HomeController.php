@@ -561,9 +561,17 @@ class HomeController extends Controller
     $date = Session::get('date');
     $date2 = Session::get('date2');
     $stat = Session::get('stat');
+    if($stat === 'nil' || $stat === 'nhis'){
     $data = Payment::where('created_at', '>=', $date)
       ->where('created_at', '<=', $date2)
-      ->where('nhis', $stat)->paginate(25);
+      ->where('nhis', $stat)
+      ->where('status', 'normal')->paginate(25);
+    }
+    if($stat === 'Unclaimed waiver' || $stat === 'retainership'){
+      $data = Payment::where('created_at', '>=', $date)
+        ->where('created_at', '<=', $date2)
+        ->where('status', $stat)->paginate(25);
+      }
     if ($stat == 'nil') {
       Session::put('info', 'non-NHIS');
     } else {

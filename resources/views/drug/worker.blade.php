@@ -19,7 +19,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Type</th>
+                        <!-- <th>Type</th> -->
                         <th></th>
                         <th></th>
                     </tr>
@@ -27,7 +27,7 @@
                     <tr>
                         <td>{{ $row->name }}</td>
                         <td>{{ $row->email }}</td>
-                        <td>{{ $row->type }}</td>
+                        <!-- <td>{{ $row->type }}</td> -->
                         <td><a href="{{ url('/workeredit/'.$row->id) }}">Edit</a></td>
                         <td><a href="{{ url('/workerdelete/'.$row->id) }}"><i class="fa fa-trash btn btn-danger"></i></a></td>
                     </tr>
