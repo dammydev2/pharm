@@ -791,4 +791,14 @@ class HomeController extends Controller
   {
     return view('report.multipleMonths');
   }
+
+  public function checkMultipleReport(Request $request)
+  {
+    $request->validate([
+      'start_month' => 'required|integer',
+      'end_month' => 'required|integer|gt:start_month',
+      'year' => 'required'
+    ]);
+  }
+
 }
