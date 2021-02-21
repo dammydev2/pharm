@@ -29,7 +29,16 @@ Route::get('/stockReport', 'HomeController@stockReport');
 Route::get('/getStockReport', 'HomeController@getStockReport');
 Route::get('/monthlyConsumption', 'HomeController@monthlyConsumption');
 Route::get('/getMonthlyConsumption', 'HomeController@getMonthlyConsumption');
+Route::get('/deptStockReport', 'HomeController@deptStockReport');
+Route::get('/getDeptStockReport', 'HomeController@getDeptStockReport');
+Route::get('/multipleMonths', 'HomeController@multipleMonths');
+Route::get('/getMultipleReport', 'HomeController@getMultipleReport');
+Route::get('/singleMonth', 'HomeController@singleMonth');
+Route::get('/getSingleConsumption', 'HomeController@getSingleConsumption');
 Route::post('/checkStockReport', 'HomeController@checkStockReport');
+Route::post('/checkSingleMonth', 'HomeController@checkSingleMonth');
+Route::post('/checkDeptStockReport', 'HomeController@checkDeptStockReport');
+Route::post('/checkMultipleReport', 'HomeController@checkMultipleReport');
 Route::post('/checkMonthReport', 'HomeController@checkMonthReport');
 
 Route::get('/addworker', 'HomeController@addworker');

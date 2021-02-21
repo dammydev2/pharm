@@ -438,9 +438,9 @@ class HomeController extends Controller
     $newStock = $currentStock + $request['quantity'];
     // updating the newstock
     DailyStock::where('name', $request['name'])
-    ->update([
-      'current_stock' => $newStock
-    ]);
+      ->update([
+        'current_stock' => $newStock
+      ]);
     Session::flash('success', 'New stock added successfully');
     return redirect('stock');
   }
@@ -561,9 +561,17 @@ class HomeController extends Controller
     $date = Session::get('date');
     $date2 = Session::get('date2');
     $stat = Session::get('stat');
+    if($stat === 'nil' || $stat === 'nhis'){
     $data = Payment::where('created_at', '>=', $date)
       ->where('created_at', '<=', $date2)
-      ->where('nhis', $stat)->paginate(25);
+      ->where('nhis', $stat)
+      ->where('status', 'normal')->paginate(25);
+    }
+    if($stat === 'Unclaimed waiver' || $stat === 'retainership'){
+      $data = Payment::where('created_at', '>=', $date)
+        ->where('created_at', '<=', $date2)
+        ->where('status', $stat)->paginate(25);
+      }
     if ($stat == 'nil') {
       Session::put('info', 'non-NHIS');
     } else {
@@ -759,27 +767,93 @@ class HomeController extends Controller
     $consumptions = json_decode(json_encode($consumptions), true);
 
     return view('report.getMonthlyConsumption')->with('consumptions', $consumptions)->with('sn', 1);
-
-
-    //     $consumptions = Order::whereMonth('created_at', $selection['month'])
-    //       ->whereYear('created_at', $selection['year'])->get();
-
-    //       $sum_array = [];
-    //       foreach($consumptions as $item) {
-    //           if (key_exists($item['name'], $sum_array)) {
-    //               $sum_array[$item['name']] += $item['quantity'];
-    //           } else {
-    //               $sum_array[$item['name']] = $item['quantity'];
-    //           }
-    //       }
-
-    //       $final_array = [];
-    //       foreach($sum_array as $key => $value) {
-    //         return $sum_array;
-    //           $final_array[] = ['name' => $key, 'quantity' => $value, ];
-    //       }
-    // return $final_array;
-
-    // return view('report.getMonthlyConsumption')->with('consumptions', $consumptions);
   }
+
+  public function deptStockReport()
+  {
+    $departments = Order::groupBy('collecting_unit')->get();
+    return view('report.deptStockReport')->with('departments', $departments);
+  }
+
+  public function checkDeptStockReport(Request $request)
+  {
+    $request->validate([
+      'start_date' => 'required',
+      'end_date' => 'required',
+    ]);
+    Session::put('request', $request->all());
+    return redirect('getDeptStockReport');
+  }
+
+  public function getDeptStockReport()
+  {
+    $request = Session::get('request');
+    $orders = Order::where('collecting_unit', $request['department'])
+    ->whereDate('created_at', '>=', $request['start_date'])
+    ->whereDate('created_at', '<=', $request['end_date'])
+    ->orderBy('created_at', 'asc')->get();
+    return view('report.getDeptStockReport')->with('orders', $orders)->with('sn',1);
+  }
+
+  public function multipleMonths()
+  {
+    return view('report.multipleMonths');
+  }
+
+  public function checkMultipleReport(Request $request)
+  {
+    $request->validate([
+      'start_month' => 'required|integer',
+      'end_month' => 'required|integer|gt:start_month',
+      'year' => 'required'
+    ]);
+    Session::put('request', $request->all());
+    return redirect('getMultipleReport');
+  }
+
+  public function getMultipleReport()
+  {
+    $request = Session::get('request');
+    $start_month = $request['start_month'];
+    $end_month = $request['end_month'];
+    $year = $request['year'];
+    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders WHERE MONTH(created_at) >= ' . $start_month .' AND MONTH(created_at) <= ' . $end_month . ' && YEAR(created_at) = ' . $year . ' GROUP BY name ORDER BY id ASC');
+    $consumptions = json_decode(json_encode($consumptions), true);
+    
+    return view('report.getMultipleReport')->with('consumptions', $consumptions)->with('sn', 1);
+  
+  }
+
+  public function singleMonth()
+  {
+    return view('report.singleMonth');
+  }
+
+  public function checkSingleMonth(Request $request)
+  {
+    $request->validate([
+      'month' => 'required',
+      'year' => 'required',
+    ]);
+    Session::put('selection', $request->all());
+    return redirect('getSingleConsumption');
+  }
+
+  public function getSingleConsumption()
+  {
+    $selection = Session::get('selection');
+    $month = $selection['month'];
+    $year = $selection['year'];
+    // return $month;
+
+    // $result = Order::groupBy('name')->select('name', 'collector', 'cost_price', 'collecting_unit', 'quantity')
+    //   ->sum('quantity');
+
+    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders WHERE MONTH(created_at) = ' . $month . ' && YEAR(created_at) = ' . $year . ' GROUP BY name ORDER BY id ASC');
+    $consumptions = json_decode(json_encode($consumptions), true);
+
+    return view('report.getSingleConsumption')->with('consumptions', $consumptions)->with('sn', 1);
+  
+  }
+
 }
