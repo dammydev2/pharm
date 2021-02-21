@@ -28,17 +28,23 @@
                         <th>average monthly sales (units)</th>
                         <th>average monthly sales (amount)</th>
                     </tr>
+                    <?php $sumMonths = 0; ?>
                     @foreach($consumptions as $key => $consumption)
                     <tr>
                         <td>{{ $sn++ }}</td>
                         <th>{{ $consumption['name'] }}</th>
                         <th>{{ $consumption['SUM(quantity)'] }}</th>
                         <th>{{ $consumption['cost_price'] }}</th>
-                        <th class="text-right">{{ number_format($consumption['cost_price'] * $consumption['SUM(quantity)'], 2) }}</th>
+                        <th class="text-right">{{ number_format($total_month_sales = $consumption['cost_price'] * $consumption['SUM(quantity)'], 2) }}</th>
                         <th class="text-right">{{ number_format(($average = $consumption['SUM(quantity)'] / $total_months), 1) }}</th>
                         <th class="text-right">{{ number_format($average * $consumption['cost_price'], 2) }}</th>
+                    <?php $sumMonths += $total_month_sales ?>
                     </tr>
                     @endforeach
+                    <tr>
+                    <th class="text-right" colspan="4">TOTAL SALES FOR {{ $total_months }} MONTHS</th>
+                    <th class="text-right">{{ number_format($sumMonths, 2) }}</th>
+                    </tr>
                 </table>
 
 
