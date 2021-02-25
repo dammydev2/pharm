@@ -15,6 +15,7 @@ class AddSellingPriceToStoresTable extends Migration
     {
         Schema::table('stores', function (Blueprint $table) {
             $table->integer('selling_price')->default(0);
+            $table->integer('markup')->default(0);
         });
     }
 
@@ -27,6 +28,7 @@ class AddSellingPriceToStoresTable extends Migration
     {
         Schema::table('stores', function (Blueprint $table) {
             $table->dropColumn('selling_price');
+            $table->dropColumn('markup');
         });
     }
 }

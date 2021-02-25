@@ -44,32 +44,30 @@ class HomeController extends Controller
 
   public function adddrug()
   {
-    return view('drug.adddrug');
+    $drugs = Store::orderBy('name', 'asc')->get();
+    return view('drug.adddrug')->with('drugs', $drugs);
   }
 
   public function enterdrug(Request $request)
   {
     $request->validate([
       'name' => 'required|unique:drugs',
-      'markup' => 'required',
-      'price' => 'required',
     ]);
-    $newMarkup = $request['markup'] + 5;
-    // dd($request);
-    $cost = ($newMarkup / 100) * $request['price'] + $request['price'];
+    // getting the cost and selling price
+    $details = Store::where('id', $request['name'])->first();
     //sdd($request['price']);
     Drug::create([
-      'name' => $request['name'],
-      'markup' => $newMarkup,
-      'cprice' => $request['price'],
-      'sprice' => $cost,
+      'name' => $details->name,
+      'markup' => $details->markup,
+      'cprice' => $details->cprice,
+      'sprice' => $details->selling_price,
     ]);
     return redirect('drug');
   }
 
   public function drug()
   {
-    $data = Drug::orderBy('qty', 'desc')->get();
+    $data = Drug::orderBy('name', 'asc')->get();
     return view('drug.drug', compact('data'));
   }
 
@@ -372,6 +370,7 @@ class HomeController extends Controller
       'cprice' => $request['cprice'],
       'selling_price' => $selling_price,
       'reorder' => $request['reorder'],
+      'markup' => $request['markup'],
       'type' => \Auth::User()->type,
     ]);
     DailyStock::create([
