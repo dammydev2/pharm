@@ -10,5 +10,6 @@ class DailyStock extends Model
         'name',
         'current_stock',
         'cost_price',
+        'selling_price',
     ];
 }
