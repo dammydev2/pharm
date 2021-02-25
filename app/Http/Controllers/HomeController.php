@@ -396,12 +396,14 @@ class HomeController extends Controller
       'name' => 'required',
       'qty' => 'required',
       'cprice' => 'required',
+      'selling_price' => 'required|integer',
     ]);
     Store::where('id', $request['id'])
       ->update([
         'name' => $request['name'],
         'qtyonhand' => $request['qty'],
         'cprice' => $request['cprice'],
+        'selling_price' => $request['selling_price'],
       ]);
     Session::flash('success', 'Drug updated successfully');
     return redirect('stock');
