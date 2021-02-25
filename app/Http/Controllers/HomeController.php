@@ -358,17 +358,19 @@ class HomeController extends Controller
       'name' => 'required',
       'reorder' => 'required',
       'cprice' => 'required',
-      'selling_price' => 'required',
+      'markup' => 'required|integer',
     ]);
     $chk = Store::where('name', $request['name'])
       ->where('type', \Auth::User()->type)->get();
     if (!$chk->isEmpty()) {
       return Redirect::back()->withErrors(['Drug already added']);
     }
+    $newMarkup = $request['markup'] + 5;
+    $selling_price = ($newMarkup / 100) * $request['cprice'] + $request['cprice'];
     Store::create([
       'name' => $request['name'],
       'cprice' => $request['cprice'],
-      'selling_price' => $request['selling_price'],
+      'selling_price' => $selling_price,
       'reorder' => $request['reorder'],
       'type' => \Auth::User()->type,
     ]);
@@ -376,7 +378,7 @@ class HomeController extends Controller
       'name' => $request['name'],
       'cost_price' => $request['cprice'],
       'current_stock' => 0,
-      'selling_price' => $request['selling_price'],
+      'selling_price' => $selling_price,
     ]);
     Session::flash('success', 'Drug added successfully');
     return redirect('stock');

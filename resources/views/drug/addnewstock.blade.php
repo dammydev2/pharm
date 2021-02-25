@@ -41,9 +41,14 @@
                     </div>  
 
 					<div class="form-group">
-                        <label>Selling Price (per unit)</label>
-                        <input type="number" name="selling_price" class="form-control">
-                    </div>                
+    					<label>Markup</label>
+                        <select name="markup" class="form-control">
+                            @for($i=0; $i<=100; $i++)
+                            <option>{{ $i }}</option>
+                            @endfor
+                        </select>
+    					<!--<input type="number" name="price" class="form-control">-->
+    				</div>               
 
     				<input type="submit" name="submit" value="Add to stocks" class="btn btn-primary">
 
