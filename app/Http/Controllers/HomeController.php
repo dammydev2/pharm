@@ -333,11 +333,12 @@ class HomeController extends Controller
         DailyStock::create([
           'name' => $stock->name,
           'cost_price' => $stock->cprice,
+          'selling_price' => $stock->selling_price,
           'current_stock' => $stock->qtyonhand,
         ]);
       }
     }
-    $data = Store::where('type', \Auth::User()->type)->orderBy('qtyonhand', 'desc')->paginate(200);
+    $data = Store::where('type', \Auth::User()->type)->orderBy('name', 'asc')->paginate(200);
     return view('drug.stock', compact('data'));
   }
 
