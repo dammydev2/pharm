@@ -40,6 +40,11 @@
                         <input type="number" name="cprice" value="{{ $row->cprice }}" class="form-control">
                     </div>        
 
+					<div class="form-group">
+                        <label>Selling Price</label>
+                        <input type="number" name="selling_price" value="{{ $row->selling_price }}" class="form-control">
+                    </div> 
+
                     <input type="hidden" name="id" value="{{ $row->id }}">        
                     @endforeach
 
