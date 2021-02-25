@@ -34,6 +34,7 @@
            <thead>
             <tr>
              <th>Item Name</th>
+             <th>Qty in stock</th>
              <th>Qty</th>
              <th>Amt</th>
              <th>Total Amt</th>
@@ -118,8 +119,9 @@ form1.onsubmit = function(e){
     tdata = "<tr>"
 
     tdata += "<td>"+name+"<input type='hidden' name='name[]' value='"+name+"' class='form-control qty'/></td>"
+    tdata += "<td>"+qty2+"<input type='hidden' name='qty2[]' value='"+qty2+"' /></td>"
     tdata += "<td><input type='number' name='qty[]' min='1' value='1' class='form-control qty'/><input type='hidden' name='c_price[]' value='"+c_price+"' class='form-control qty'/></td>"
-    tdata += "<td>"+price+"</td><td>&#8358;<span class='tamount'>"+price+"</span><input type='hidden' name='price[]' value='"+price+"' /><input type='hidden' name='stockid[]' value='"+stockid+"' /><input type='hidden' name='qty2[]' value='"+qty2+"' /></td>"
+    tdata += "<td>"+price+"</td><td>&#8358;<span class='tamount'>"+price+"</span><input type='hidden' name='price[]' value='"+price+"' /><input type='hidden' name='stockid[]' value='"+stockid+"' /></td>"
     tdata += "<td><a href='#' class='btn btn-danger btn-xs rm'><i class='fa fa-trash'></i></a></td>"
     tdata += "</tr>";
     $("table.items tbody").append(tdata);
