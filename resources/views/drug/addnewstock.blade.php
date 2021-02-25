@@ -38,6 +38,11 @@
                     <div class="form-group">
                         <label>Cost Price (per unit)</label>
                         <input type="number" name="cprice" class="form-control">
+                    </div>  
+
+					<div class="form-group">
+                        <label>Selling Price (per unit)</label>
+                        <input type="number" name="selling_price" class="form-control">
                     </div>                
 
     				<input type="submit" name="submit" value="Add to stocks" class="btn btn-primary">

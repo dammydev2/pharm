@@ -357,6 +357,7 @@ class HomeController extends Controller
       'name' => 'required',
       'reorder' => 'required',
       'cprice' => 'required',
+      'selling_price' => 'required',
     ]);
     $chk = Store::where('name', $request['name'])
       ->where('type', \Auth::User()->type)->get();
@@ -366,13 +367,15 @@ class HomeController extends Controller
     Store::create([
       'name' => $request['name'],
       'cprice' => $request['cprice'],
+      'selling_price' => $request['selling_price'],
       'reorder' => $request['reorder'],
       'type' => \Auth::User()->type,
     ]);
     DailyStock::create([
       'name' => $request['name'],
       'cost_price' => $request['cprice'],
-      'current_stock' => 0
+      'current_stock' => 0,
+      'selling_price' => $request['selling_price'],
     ]);
     Session::flash('success', 'Drug added successfully');
     return redirect('stock');
