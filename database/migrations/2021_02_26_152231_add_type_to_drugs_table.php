@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddStatusToPaymentsTable extends Migration
+class AddTypeToDrugsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,7 @@ class AddStatusToPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('payments', function (Blueprint $table) {
-            $table->enum('payment_status', ['pending','paid'])->default('pending');
+        Schema::table('drugs', function (Blueprint $table) {
             $table->string('type');
         });
     }
@@ -26,8 +25,7 @@ class AddStatusToPaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('payments', function (Blueprint $table) {
-            $table->dropColumn('payment_status');
+        Schema::table('drugs', function (Blueprint $table) {
             $table->dropColumn('type');
         });
     }

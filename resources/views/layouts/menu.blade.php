@@ -1,4 +1,4 @@
-@if(\Auth::User()->type == 'sales')
+@if(\Auth::User()->type == 'sales' || \Auth::User()->type == 'In-patient')
 <li><a href="{{ url('/home') }}">Dashboard</a></li>
 <li><a href="{{ url('/sales') }}">sales</a></li>
 <li><a href="{{ url('/profit') }}">Profit Margin</a></li>
@@ -9,6 +9,7 @@
 <li><a href="{{ url('/totalSales') }}">Total Sales</a></li>
 @endif
 
+
 @if(\Auth::User()->type === 'store')
 <li><a href="{{ url('/stock') }}">Main Store/Stock</a></li>
 <li><a href="{{ url('/stockReport') }}">Stock/Sales Report</a></li>
@@ -18,7 +19,7 @@
 <li><a href="{{ url('/singleMonth') }}">Single Month Consuption</a></li>
 @endif
 
-@if(\Auth::User()->type == 'substore')
+@if(\Auth::User()->type == 'substore' || \Auth::User()->type == 'In-patient')
 <li><a href="{{ url('/drug') }}">Drug/Stock</a></li>
 @endif
 

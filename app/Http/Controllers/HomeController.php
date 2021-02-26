@@ -51,23 +51,33 @@ class HomeController extends Controller
   public function enterdrug(Request $request)
   {
     $request->validate([
-      'name' => 'required|unique:drugs',
+      'name' => 'required',
     ]);
     // getting the cost and selling price
     $details = Store::where('id', $request['name'])->first();
+    // checking if drug exist for department
+    $drugName = $details->name;
+    $chk = Drug::where('name', $drugName)
+    ->where('type', \Auth::User()->type)->first();
+    if($chk){
+      Session::flash('error', 'drug already exist');
+      return redirect()->back();
+    }
+    
     //sdd($request['price']);
     Drug::create([
       'name' => $details->name,
       'markup' => $details->markup,
       'cprice' => $details->cprice,
       'sprice' => $details->selling_price,
+      'type' => \Auth::User()->type
     ]);
     return redirect('drug');
   }
 
   public function drug()
   {
-    $data = Drug::orderBy('name', 'asc')->get();
+    $data = Drug::orderBy('name', 'asc')->where('type', \Auth::User()->type)->get();
     return view('drug.drug', compact('data'));
   }
 
@@ -151,6 +161,7 @@ class HomeController extends Controller
       $query = $request->get('query');
       if ($query != '') {
         $data = Drug::where('name', 'like', '%' . $query . '%')
+        ->where('type', \Auth::User()->type)
           //->orWhere('name', 'like', '%'.$query.'%')
           /** ->orWhere('City', 'like', '%'.$query.'%')
          ->orWhere('PostalCode', 'like', '%'.$query.'%')
@@ -194,8 +205,16 @@ class HomeController extends Controller
   public function sale_enter(Request $request)
   {
     //getting the receipt number
+    $type = \Auth::User()->type;
+    if($type === 'In-patient'){
+      $first = 'P';
+    }
+    else{
+      $first = "S";
+    }
     $data = Sale::orderBy('id', 'desc')->first();
-    $rec = $data->id + 1000;
+    $num = $data->id + 1000;
+    $rec = $first.$num;
     $num = count($_POST['name']);
     for ($i = 0; $i < $num; $i++) {
       Sale::create([
@@ -265,6 +284,7 @@ class HomeController extends Controller
       'balance' => $request['balance'],
       'status' => $request['status'],
       'seller' => \Auth::User()->name,
+      'type' => \Auth::User()->type
     ]);
     return redirect('displayRecNum');
   }
@@ -347,7 +367,7 @@ class HomeController extends Controller
     $date2 = Session::get('date2');
     $data = Payment::where('created_at', '>=', $date)
       ->where('created_at', '<=', $date2)
-      ->where('return', 0)->paginate(25);
+      ->where('return', 0)->where('type', \Auth::User()->type)->get();
     return view('drug.rangesales', compact('data'));
   }
 
@@ -608,12 +628,14 @@ class HomeController extends Controller
       $data = Payment::where('created_at', '>=', $date)
         ->where('created_at', '<=', $date2)
         ->where('nhis', $stat)
+        ->where('type', \Auth::User()->type)
         ->where('status', 'normal')->get();
     }
     if ($stat === 'Unclaimed waiver' || $stat === 'retainership') {
       $data = Payment::where('created_at', '>=', $date)
         ->where('created_at', '<=', $date2)
-        ->where('status', $stat)->paginate(25);
+        ->where('type', \Auth::User()->type)
+        ->where('status', $stat)->get();
     }
     if ($stat == 'nil') {
       Session::put('info', 'non-NHIS');
@@ -945,10 +967,10 @@ class HomeController extends Controller
   public function allSalesReport()
   {
     $request = Session::get('dates');
-    $user = \Auth::user()->name;
+    $type = \Auth::user()->type;
     $allPayment = Payment::whereDate('created_at', '>=', $request['start_date'])
       ->whereDate('created_at', '<=', $request['end_date'])
-      ->where('seller', $user)->get();
+      ->where('type', $type)->get();
     return view('report.allSalesReport')->with('data', $allPayment);
   }
 }
