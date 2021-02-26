@@ -1,24 +1,25 @@
-@if(\Auth::User()->type == 'sales')
+@if(\Auth::User()->type == 'sales' || \Auth::User()->type == 'In-patient')
 <li><a href="{{ url('/home') }}">Dashboard</a></li>
 <li><a href="{{ url('/sales') }}">sales</a></li>
 <li><a href="{{ url('/profit') }}">Profit Margin</a></li>
 <li><a href="{{ url('/recall') }}">Recall Prescription</a></li>
 <li><a href="{{ url('/report') }}">Report</a></li>
-<li><a href="{{ url('/return') }}">Return stock</a></li>
+<li><a href="{{ url('/return') }}">Return Stock</a></li>
 <li><a href="{{ url('/returnReceipt') }}">Return Receipt</a></li>
 <li><a href="{{ url('/totalSales') }}">Total Sales</a></li>
 @endif
+
 
 @if(\Auth::User()->type === 'store')
 <li><a href="{{ url('/stock') }}">Main Store/Stock</a></li>
 <li><a href="{{ url('/stockReport') }}">Stock/Sales Report</a></li>
 <li><a href="{{ url('/monthlyConsumption') }}">Monthly Consumption/forecast</a></li>
-<li><a href="{{ url('/deptStockReport') }}">Stock report by department</a></li>
-<li><a href="{{ url('/multipleMonths') }}">Multiple months consuption</a></li>
-<li><a href="{{ url('/singleMonth') }}">Single month consuption</a></li>
+<li><a href="{{ url('/deptStockReport') }}">Actual Sales by Department</a></li>
+<li><a href="{{ url('/multipleMonths') }}">Multiple Months Consuption</a></li>
+<li><a href="{{ url('/singleMonth') }}">Single Month Consuption</a></li>
 @endif
 
-@if(\Auth::User()->type == 'substore')
+@if(\Auth::User()->type == 'substore' || \Auth::User()->type == 'In-patient')
 <li><a href="{{ url('/drug') }}">Drug/Stock</a></li>
 @endif
 

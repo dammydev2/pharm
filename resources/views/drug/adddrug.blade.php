@@ -13,6 +13,10 @@
 			<div class="panel-heading">Add Drug</div>
 			<div class="panel-body">
 
+				@if(Session::has('error'))
+				<div class="alert alert-danger">{{ Session::get('error') }}</div>
+				@endif
+
 				<form method="post" action="{{ url('/enterdrug') }}">
 					{{ csrf_field() }}
 

@@ -51,23 +51,33 @@ class HomeController extends Controller
   public function enterdrug(Request $request)
   {
     $request->validate([
-      'name' => 'required|unique:drugs',
+      'name' => 'required',
     ]);
     // getting the cost and selling price
     $details = Store::where('id', $request['name'])->first();
+    // checking if drug exist for department
+    $drugName = $details->name;
+    $chk = Drug::where('name', $drugName)
+    ->where('type', \Auth::User()->type)->first();
+    if($chk){
+      Session::flash('error', 'drug already exist');
+      return redirect()->back();
+    }
+    
     //sdd($request['price']);
     Drug::create([
       'name' => $details->name,
       'markup' => $details->markup,
       'cprice' => $details->cprice,
       'sprice' => $details->selling_price,
+      'type' => \Auth::User()->type
     ]);
     return redirect('drug');
   }
 
   public function drug()
   {
-    $data = Drug::orderBy('name', 'asc')->get();
+    $data = Drug::orderBy('name', 'asc')->where('type', \Auth::User()->type)->get();
     return view('drug.drug', compact('data'));
   }
 
@@ -151,6 +161,7 @@ class HomeController extends Controller
       $query = $request->get('query');
       if ($query != '') {
         $data = Drug::where('name', 'like', '%' . $query . '%')
+        ->where('type', \Auth::User()->type)
           //->orWhere('name', 'like', '%'.$query.'%')
           /** ->orWhere('City', 'like', '%'.$query.'%')
          ->orWhere('PostalCode', 'like', '%'.$query.'%')
@@ -194,8 +205,16 @@ class HomeController extends Controller
   public function sale_enter(Request $request)
   {
     //getting the receipt number
+    $type = \Auth::User()->type;
+    if($type === 'In-patient'){
+      $first = 'P';
+    }
+    else{
+      $first = "S";
+    }
     $data = Sale::orderBy('id', 'desc')->first();
-    $rec = $data->id + 1000;
+    $num = $data->id + 1000;
+    $rec = $first.$num;
     $num = count($_POST['name']);
     for ($i = 0; $i < $num; $i++) {
       Sale::create([
@@ -208,11 +227,11 @@ class HomeController extends Controller
         'rec' => $rec,
       ]);
       //subtracting quantity brought from stock
-      $newstock[$i] = $request['qty2'][$i] - $request['qty'][$i];
-      Drug::where('id', $request['stockid'][$i])
-        ->update([
-          'qty' => $newstock[$i]
-        ]);
+      // $newstock[$i] = $request['qty2'][$i] - $request['qty'][$i];
+      // Drug::where('id', $request['stockid'][$i])
+      //   ->update([
+      //     'qty' => $newstock[$i]
+      //   ]);
     }
     Session::put('rec', $rec);
     return redirect('recnum');
@@ -265,6 +284,7 @@ class HomeController extends Controller
       'balance' => $request['balance'],
       'status' => $request['status'],
       'seller' => \Auth::User()->name,
+      'type' => \Auth::User()->type
     ]);
     return redirect('displayRecNum');
   }
@@ -288,13 +308,24 @@ class HomeController extends Controller
     $request->validate([
       'amount' => 'required',
     ]);
+
+    // saving the updated drugs
+    $num = count($request['drug_name']);
+    for ($i = 0; $i < $num; $i++) {
+      $newQty[$i] = $request['quantity_in_stock'][$i] - $request['quantity'][$i];
+      Drug::where('name', $request['drug_name'][$i])
+      ->update([
+        'qty' => $newQty[$i]
+      ]);
+    }
+
     $rec = Session::get('rec');
     Payment::where('rec', $rec)
-    ->update([
-      'amount' => $request['amount'],
-      'balance' => $request['balance'],
-      'payment_status' => 'paid'
-    ]);
+      ->update([
+        'amount' => $request['amount'],
+        'balance' => $request['balance'],
+        'payment_status' => 'paid'
+      ]);
     return redirect('receipt');
   }
 
@@ -336,7 +367,7 @@ class HomeController extends Controller
     $date2 = Session::get('date2');
     $data = Payment::where('created_at', '>=', $date)
       ->where('created_at', '<=', $date2)
-      ->where('return', 0)->paginate(25);
+      ->where('return', 0)->where('type', \Auth::User()->type)->get();
     return view('drug.rangesales', compact('data'));
   }
 
@@ -593,17 +624,19 @@ class HomeController extends Controller
     $date = Session::get('date');
     $date2 = Session::get('date2');
     $stat = Session::get('stat');
-    if($stat === 'nil' || $stat === 'nhis'){
-    $data = Payment::where('created_at', '>=', $date)
-      ->where('created_at', '<=', $date2)
-      ->where('nhis', $stat)
-      ->where('status', 'normal')->get();
-    }
-    if($stat === 'Unclaimed waiver' || $stat === 'retainership'){
+    if ($stat === 'nil' || $stat === 'nhis') {
       $data = Payment::where('created_at', '>=', $date)
         ->where('created_at', '<=', $date2)
-        ->where('status', $stat)->paginate(25);
-      }
+        ->where('nhis', $stat)
+        ->where('type', \Auth::User()->type)
+        ->where('status', 'normal')->get();
+    }
+    if ($stat === 'Unclaimed waiver' || $stat === 'retainership') {
+      $data = Payment::where('created_at', '>=', $date)
+        ->where('created_at', '<=', $date2)
+        ->where('type', \Auth::User()->type)
+        ->where('status', $stat)->get();
+    }
     if ($stat == 'nil') {
       Session::put('info', 'non-NHIS');
     } else {
@@ -752,8 +785,8 @@ class HomeController extends Controller
 
     // getting purchases
     $data['purchases'] = Storestock::whereDate('created_at', '>=', $dates['start_date'])
-    ->whereDate('created_at', '<=', $dates['end_date'])->orderBy('created_at', 'asc')->get();
-    
+      ->whereDate('created_at', '<=', $dates['end_date'])->orderBy('created_at', 'asc')->get();
+
     // getting sales
     $data['sales'] = Order::whereDate('created_at', '>=', $dates['start_date'])
       ->whereDate('created_at', '<=', $dates['end_date'])->orderBy('created_at', 'asc')->get();
@@ -828,10 +861,10 @@ class HomeController extends Controller
   {
     $request = Session::get('request');
     $orders = Order::where('collecting_unit', $request['department'])
-    ->whereDate('created_at', '>=', $request['start_date'])
-    ->whereDate('created_at', '<=', $request['end_date'])
-    ->orderBy('created_at', 'asc')->get();
-    return view('report.getDeptStockReport')->with('orders', $orders)->with('sn',1);
+      ->whereDate('created_at', '>=', $request['start_date'])
+      ->whereDate('created_at', '<=', $request['end_date'])
+      ->orderBy('created_at', 'asc')->get();
+    return view('report.getDeptStockReport')->with('orders', $orders)->with('sn', 1);
   }
 
   public function multipleMonths()
@@ -856,11 +889,10 @@ class HomeController extends Controller
     $start_month = $request['start_month'];
     $end_month = $request['end_month'];
     $year = $request['year'];
-    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders WHERE MONTH(created_at) >= ' . $start_month .' AND MONTH(created_at) <= ' . $end_month . ' && YEAR(created_at) = ' . $year . ' GROUP BY name ORDER BY id ASC');
+    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders WHERE MONTH(created_at) >= ' . $start_month . ' AND MONTH(created_at) <= ' . $end_month . ' && YEAR(created_at) = ' . $year . ' GROUP BY name ORDER BY id ASC');
     $consumptions = json_decode(json_encode($consumptions), true);
-    
+
     return view('report.getMultipleReport')->with('consumptions', $consumptions)->with('sn', 1);
-  
   }
 
   public function singleMonth()
@@ -892,7 +924,6 @@ class HomeController extends Controller
     $consumptions = json_decode(json_encode($consumptions), true);
 
     return view('report.getSingleConsumption')->with('consumptions', $consumptions)->with('sn', 1);
-  
   }
 
   public function returnReceipt()
@@ -908,7 +939,7 @@ class HomeController extends Controller
     ]);
     // checking if the receipt have not been paid
     $checkPayment = Payment::where('rec', $request['rec'])->where('payment_status', 'paid')->first();
-    if($checkPayment){
+    if ($checkPayment) {
       Session::flash('error', 'receipt has been paid');
       return redirect()->back();
     }
@@ -936,11 +967,10 @@ class HomeController extends Controller
   public function allSalesReport()
   {
     $request = Session::get('dates');
-    $user = \Auth::user()->name;
+    $type = \Auth::user()->type;
     $allPayment = Payment::whereDate('created_at', '>=', $request['start_date'])
-    ->whereDate('created_at', '<=', $request['end_date'])
-    ->where('seller', $user)->get();
+      ->whereDate('created_at', '<=', $request['end_date'])
+      ->where('type', $type)->get();
     return view('report.allSalesReport')->with('data', $allPayment);
   }
-
 }

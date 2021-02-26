@@ -4,13 +4,13 @@
 <div class="container">
     <div class="row">
 
-    	<div class="panel panel-primary col-sm-8">
-    		<div class="panel-heading">Receipt Number</div>
-    		<div class="panel-body">
+        <div class="panel panel-primary col-sm-8">
+            <div class="panel-heading">Receipt Number</div>
+            <div class="panel-body">
 
                 <div class="alert alert-success">
                     <h3><b>Receipt Number: {{ Session::get('rec') }}</b></h3>
-                    
+
                     <h3><b><i>Total: &#8358; {{ number_format($data->sprice,2) }}</i></b></h3>
 
                 </div>
@@ -47,45 +47,46 @@
                         <input type="text" name="balance" class="form-control" readonly="" id="a3">
                     </div>
 
-                    
+                    @foreach($data->sales as $sale)
+                    <input type="hidden" value="{{ $sale->name }}" name="drug_name[]">
+                    <input type="hidden" value="{{ $sale->quantity }}" name="quantity[]">
+                    <input type="hidden" value="{{ $sale->drug->qty }}" name="quantity_in_stock[]">
+                    @endforeach
                     <input type="submit" class="btn btn-primary" value="confirm payment" name="">
 
 
 
 
-                   <!-- <input id="a1" type="text" />
+                    <!-- <input id="a1" type="text" />
 <input id="a2" type="text" onkeyup="calculate()"  />
 <input id="a3" type="text" name="total_amt" />-->
-<script type="text/javascript">
-    calculate = function()
-{
-    var resources = document.getElementById('a1').value;
-    var minutes = document.getElementById('a4').value; 
-    document.getElementById('a3').value = parseInt(resources)-parseInt(minutes);
+                    <script type="text/javascript">
+                        calculate = function() {
+                            var resources = document.getElementById('a1').value;
+                            var minutes = document.getElementById('a4').value;
+                            document.getElementById('a3').value = parseInt(resources) - parseInt(minutes);
 
-   }
-   //cecking for nhis %
- check = function()
-   {
-    var amount = document.getElementById('a2').value; 
-    var percent = document.getElementById('percent').value;
-    var nhis = parseInt((percent/100) * amount);
-   var txt = document.getElementById('a4').value = parseInt(nhis);
-   if (percent == 0 ) {
-        document.getElementById('a4').value = amount
-    }
-    //txt.value = topay;
-    console.log(nhis)
-   } 
+                        }
+                        //cecking for nhis %
+                        check = function() {
+                            var amount = document.getElementById('a2').value;
+                            var percent = document.getElementById('percent').value;
+                            var nhis = parseInt((percent / 100) * amount);
+                            var txt = document.getElementById('a4').value = parseInt(nhis);
+                            if (percent == 0) {
+                                document.getElementById('a4').value = amount
+                            }
+                            //txt.value = topay;
+                            console.log(nhis)
+                        }
+                    </script>
 
-</script>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
                 </form>
 
-    		</div>
-    	</div>
+            </div>
+        </div>
 
 
     </div>
