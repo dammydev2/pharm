@@ -908,4 +908,19 @@ class HomeController extends Controller
     return redirect()->back();
   }
 
+  public function totalSales()
+  {
+    return view('report.totalSales');
+  }
+
+  public function gatAllSalesReport(Request $request)
+  {
+    $request->validate([
+      'start_date' => 'required',
+      'end_date' => 'required'
+    ]);
+    Session::put('dates', $request->all());
+    return redirect('allSalesReport');
+  }
+
 }
