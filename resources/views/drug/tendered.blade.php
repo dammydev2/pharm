@@ -10,17 +10,8 @@
 
                 <div class="alert alert-success">
                     <h3><b>Receipt Number: {{ Session::get('rec') }}</b></h3>
-                    <?php
-                    $total = 0;
-                    $cost = 0;
-                    foreach ($data as $row) {
-                         $amount = $row->sprice * $row->quantity;
-                         $cost_price = $row->cprice * $row->quantity;
-                         $total += $amount;
-                         $cost += $cost_price;
-                    }
-                    ?>
-                    <h3><b><i>Total: &#8358; {{ number_format($total,2) }}</i></b></h3>
+                    
+                    <h3><b><i>Total: &#8358; {{ number_format($data->sprice,2) }}</i></b></h3>
 
                 </div>
 
@@ -38,31 +29,12 @@
 
                     <div class="form-group">
                         <label>Customer Name</label>
-                        <input type="text" name="name" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <label>NHIS %</label>
-                        <input type="number" onkeyup="check()" id="percent" name="percent" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <label>NHIS no</label>
-                        <input type="text" name="nhisno" class="form-control">
+                        <input type="text" value="{{ $data->name }}" readonly name="name" class="form-control">
                     </div>
 
                     <div class="form-group">
                         <label>To pay</label>
-                        <input type="hiddn" id="a4" name="sprice" class="form-control" readonly="">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select name="status" class="form-control" id="">
-                            <option>normal</option>
-                            <option>Unclaimed waiver</option>
-                            <option>retainership</option>
-                        </select>
+                        <input type="hiddn" id="a4" readonly value="{{ $data->sprice }}" name="sprice" class="form-control" readonly="">
                     </div>
 
                     <div class="form-group">
@@ -75,9 +47,7 @@
                         <input type="text" name="balance" class="form-control" readonly="" id="a3">
                     </div>
 
-                    <input type="hidden" id="a2"value="{{ $total }}" name="total">
-                    <input type="hidden" name="cprice" value="{{ $cost }}">
-
+                    
                     <input type="submit" class="btn btn-primary" value="confirm payment" name="">
 
 

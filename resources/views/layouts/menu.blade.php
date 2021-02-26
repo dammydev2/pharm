@@ -5,6 +5,8 @@
 <li><a href="{{ url('/recall') }}">Recall Prescription</a></li>
 <li><a href="{{ url('/report') }}">Report</a></li>
 <li><a href="{{ url('/return') }}">Return stock</a></li>
+<li><a href="{{ url('/returnReceipt') }}">Return Receipt</a></li>
+<li><a href="{{ url('/totalSales') }}">Total Sales</a></li>
 @endif
 
 @if(\Auth::User()->type === 'store')

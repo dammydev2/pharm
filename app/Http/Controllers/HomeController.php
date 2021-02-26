@@ -244,17 +244,10 @@ class HomeController extends Controller
     return redirect('tendered');
   }
 
-  public function tendered()
-  {
-    $rec = Session::get('rec');
-    $data = Sale::where('rec', $rec)->get();
-    return view('drug.tendered', compact('data'));
-  }
-
-  public function entertendered(Request $request)
+  public function enterDetails(Request $request)
   {
     $request->validate([
-      'amount' => 'required',
+      'name' => 'required|string',
     ]);
     if ($request['percent'] == 0) {
       $nhis = 'nil';
@@ -272,6 +265,35 @@ class HomeController extends Controller
       'balance' => $request['balance'],
       'status' => $request['status'],
       'seller' => \Auth::User()->name,
+    ]);
+    return redirect('displayRecNum');
+  }
+
+  public function displayRecNum()
+  {
+    $rec = Session::get('rec');
+    $data = Payment::where('rec', $rec)->first();
+    return view('drug.displayRecNum', compact('data'));
+  }
+
+  public function tendered()
+  {
+    $rec = Session::get('rec');
+    $data = Payment::where('rec', $rec)->first();
+    return view('drug.tendered', compact('data'));
+  }
+
+  public function entertendered(Request $request)
+  {
+    $request->validate([
+      'amount' => 'required',
+    ]);
+    $rec = Session::get('rec');
+    Payment::where('rec', $rec)
+    ->update([
+      'amount' => $request['amount'],
+      'balance' => $request['balance'],
+      'payment_status' => 'paid'
     ]);
     return redirect('receipt');
   }
@@ -572,7 +594,7 @@ class HomeController extends Controller
     $data = Payment::where('created_at', '>=', $date)
       ->where('created_at', '<=', $date2)
       ->where('nhis', $stat)
-      ->where('status', 'normal')->paginate(25);
+      ->where('status', 'normal')->get();
     }
     if($stat === 'Unclaimed waiver' || $stat === 'retainership'){
       $data = Payment::where('created_at', '>=', $date)
@@ -861,6 +883,54 @@ class HomeController extends Controller
 
     return view('report.getSingleConsumption')->with('consumptions', $consumptions)->with('sn', 1);
   
+  }
+
+  public function returnReceipt()
+  {
+    $receipts = Sale::orderBy('id', 'desc')->groupBy('rec')->get();
+    return view('drug.returnReceipt')->with('receipts', $receipts);
+  }
+
+  public function removeReceipt(Request $request)
+  {
+    $request->validate([
+      'rec' => 'required|integer'
+    ]);
+    // checking if the receipt have not been paid
+    $checkPayment = Payment::where('rec', $request['rec'])->where('payment_status', 'paid')->first();
+    if($checkPayment){
+      Session::flash('error', 'receipt has been paid');
+      return redirect()->back();
+    }
+    Sale::where('rec', $request['rec'])->delete();
+    Payment::where('rec', $request['rec'])->delete();
+    Session::flash('success', 'details removed successfully');
+    return redirect()->back();
+  }
+
+  public function totalSales()
+  {
+    return view('report.totalSales');
+  }
+
+  public function gatAllSalesReport(Request $request)
+  {
+    $request->validate([
+      'start_date' => 'required',
+      'end_date' => 'required'
+    ]);
+    Session::put('dates', $request->all());
+    return redirect('allSalesReport');
+  }
+
+  public function allSalesReport()
+  {
+    $request = Session::get('dates');
+    $user = \Auth::user()->name;
+    $allPayment = Payment::whereDate('created_at', '>=', $request['start_date'])
+    ->whereDate('created_at', '<=', $request['end_date'])
+    ->where('seller', $user)->get();
+    return view('report.allSalesReport')->with('data', $allPayment);
   }
 
 }
