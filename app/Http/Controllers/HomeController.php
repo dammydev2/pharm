@@ -251,16 +251,11 @@ class HomeController extends Controller
     return view('drug.tendered', compact('data'));
   }
 
-  public function entertendered(Request $request)
+  public function enterDetails(Request $request)
   {
     $request->validate([
-      'amount' => 'required',
+      'name' => 'required|string',
     ]);
-    if ($request['percent'] == 0) {
-      $nhis = 'nil';
-    } else {
-      $nhis = 'nhis';
-    }
     Payment::create([
       'rec' => Session::get('rec'),
       'name' => $request['name'],
@@ -273,6 +268,21 @@ class HomeController extends Controller
       'status' => $request['status'],
       'seller' => \Auth::User()->name,
     ]);
+  }
+
+  public function entertendered(Request $request)
+  {
+    $request->validate([
+      'amount' => 'required',
+    ]);
+    if ($request['percent'] == 0) {
+      $nhis = 'nil';
+    } else {
+      $nhis = 'nhis';
+    }
+    
+
+
     return redirect('receipt');
   }
 

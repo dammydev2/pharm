@@ -118,6 +118,7 @@ Route::post('/searchrec', 'HomeController@searchrec');
 Route::post('/enterstock', 'HomeController@enterstock');
 
 Route::post('/entertendered', 'HomeController@entertendered');
+Route::post('/enterDetails', 'HomeController@enterDetails');
 
 Route::post('/checkprofit', 'HomeController@checkprofit');
 
