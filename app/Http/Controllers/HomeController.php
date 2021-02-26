@@ -441,14 +441,15 @@ class HomeController extends Controller
     $request->validate([
       'name' => 'required',
       'cprice' => 'required',
+      'selling_price' => 'required',
       'quantity' => 'required',
       'exp' => 'required',
     ]);
-    // return $request;
     Storestock::create([
       'name' => $request['name'],
       'cprice' => $request['cprice'],
       'quantity' => $request['quantity'],
+      'selling_price' => $request['selling_price'],
       'exp' => $request['exp'],
       'batch_no' => $request['batch_no'],
       'supplier_name' => $request['supplier_name'],
@@ -460,6 +461,7 @@ class HomeController extends Controller
       ->where('type', \Auth::User()->type)
       ->update([
         'qtyonhand' => $newstock,
+        'selling_price' => $request['selling_price']
       ]);
     // adding it to daily stock
     $getDrug = DailyStock::where('name', $request['name'])->first();
@@ -468,7 +470,8 @@ class HomeController extends Controller
     // updating the newstock
     DailyStock::where('name', $request['name'])
       ->update([
-        'current_stock' => $newStock
+        'current_stock' => $newStock,
+        'selling_price' => $request['selling_price']
       ]);
     Session::flash('success', 'New stock added successfully');
     return redirect('stock');
@@ -744,6 +747,13 @@ class HomeController extends Controller
     // getting opening stock
     $data['opening_stock'] = DailyStock::whereDate('created_at', $dates['start_date'])->get();
 
+    // getting closing stock
+    $data['closing_stock'] = DailyStock::whereDate('created_at', $dates['end_date'])->get();
+
+    // getting purchases
+    $data['purchases'] = Storestock::whereDate('created_at', '>=', $dates['start_date'])
+    ->whereDate('created_at', '<=', $dates['end_date'])->orderBy('created_at', 'asc')->get();
+    
     // getting sales
     $data['sales'] = Order::whereDate('created_at', '>=', $dates['start_date'])
       ->whereDate('created_at', '<=', $dates['end_date'])->orderBy('created_at', 'asc')->get();

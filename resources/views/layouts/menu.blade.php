@@ -11,7 +11,7 @@
 
 @if(\Auth::User()->type === 'store')
 <li><a href="{{ url('/stock') }}">Main Store/Stock</a></li>
-<li><a href="{{ url('/stockReport') }}">Stock Report</a></li>
+<li><a href="{{ url('/stockReport') }}">Stock/Sales Report</a></li>
 <li><a href="{{ url('/monthlyConsumption') }}">Monthly Consumption/forecast</a></li>
 <li><a href="{{ url('/deptStockReport') }}">Stock report by department</a></li>
 <li><a href="{{ url('/multipleMonths') }}">Multiple months consuption</a></li>
