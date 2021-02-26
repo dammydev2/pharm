@@ -106,8 +106,11 @@ Route::get('/return', 'HomeController@return');
 Route::get('/thereturn', 'HomeController@thereturn');
 
 Route::get('/order/{id}', 'HomeController@order');
+Route::get('/displayRecNum', 'HomeController@displayRecNum');
+Route::get('/returnReceipt', 'HomeController@returnReceipt');
 
 Route::post('/sale_enter', 'HomeController@sale_enter');
+Route::post('/removeReceipt', 'HomeController@removeReceipt');
 
 Route::post('/updatestock', 'HomeController@updatestock');
 

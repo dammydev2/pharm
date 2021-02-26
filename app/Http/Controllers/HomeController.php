@@ -244,18 +244,16 @@ class HomeController extends Controller
     return redirect('tendered');
   }
 
-  public function tendered()
-  {
-    $rec = Session::get('rec');
-    $data = Sale::where('rec', $rec)->get();
-    return view('drug.tendered', compact('data'));
-  }
-
   public function enterDetails(Request $request)
   {
     $request->validate([
       'name' => 'required|string',
     ]);
+    if ($request['percent'] == 0) {
+      $nhis = 'nil';
+    } else {
+      $nhis = 'nhis';
+    }
     Payment::create([
       'rec' => Session::get('rec'),
       'name' => $request['name'],
@@ -268,6 +266,21 @@ class HomeController extends Controller
       'status' => $request['status'],
       'seller' => \Auth::User()->name,
     ]);
+    return redirect('displayRecNum');
+  }
+
+  public function displayRecNum()
+  {
+    $rec = Session::get('rec');
+    $data = Payment::where('rec', $rec)->first();
+    return view('drug.displayRecNum', compact('data'));
+  }
+
+  public function tendered()
+  {
+    $rec = Session::get('rec');
+    $data = Payment::where('rec', $rec)->first();
+    return view('drug.tendered', compact('data'));
   }
 
   public function entertendered(Request $request)
@@ -275,14 +288,13 @@ class HomeController extends Controller
     $request->validate([
       'amount' => 'required',
     ]);
-    if ($request['percent'] == 0) {
-      $nhis = 'nil';
-    } else {
-      $nhis = 'nhis';
-    }
-    
-
-
+    $rec = Session::get('rec');
+    Payment::where('rec', $rec)
+    ->update([
+      'amount' => $request['amount'],
+      'balance' => $request['balance'],
+      'payment_status' => 'paid'
+    ]);
     return redirect('receipt');
   }
 
@@ -871,6 +883,29 @@ class HomeController extends Controller
 
     return view('report.getSingleConsumption')->with('consumptions', $consumptions)->with('sn', 1);
   
+  }
+
+  public function returnReceipt()
+  {
+    $receipts = Sale::orderBy('id', 'desc')->groupBy('rec')->get();
+    return view('drug.returnReceipt')->with('receipts', $receipts);
+  }
+
+  public function removeReceipt(Request $request)
+  {
+    $request->validate([
+      'rec' => 'required|integer'
+    ]);
+    // checking if the receipt have not been paid
+    $checkPayment = Payment::where('rec', $request['rec'])->where('payment_status', 'paid')->first();
+    if($checkPayment){
+      Session::flash('error', 'receipt has been paid');
+      return redirect()->back();
+    }
+    Sale::where('rec', $request['rec'])->delete();
+    Payment::where('rec', $request['rec'])->delete();
+    Session::flash('success', 'details removed successfully');
+    return redirect()->back();
   }
 
 }

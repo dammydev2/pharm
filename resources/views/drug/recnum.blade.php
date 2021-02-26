@@ -71,6 +71,7 @@
                     <select name="status" class="form-control" id="">
                         <option>normal</option>
                         <option>Unclaimed waiver</option>
+                        <option>waiver</option>
                         <option>retainership</option>
                     </select>
                 </div>
