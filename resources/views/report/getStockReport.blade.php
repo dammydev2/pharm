@@ -15,6 +15,7 @@
 
                 <ul class="list-group">
                     <li class="list-group-item">NET SALES FOR {{ $dates['start_date'] }} - {{ $dates['end_date'] }} <span id="total" class="badge"></span></li>
+                    <li class="list-group-item">TOTAL OPENING STOCK <span id="totalOpeningStock" class="badge"></span></li>
                     <!-- <li class="list-group-item">CLOSING STOCK <span class="badge">5</span></li>
                     <li class="list-group-item">TOTAL SALES <span class="badge">3</span></li> -->
                 </ul>
@@ -29,16 +30,19 @@
                             </tr>
                             <tr>
                                 <th>drug</th>
-                                <th>stock</th>
-                                <th>cost price</th>
+                                <th>opening stock</th>
+                                <th>selling price</th>
                             </tr>
+                            <?php $totalOpeningStock = 0; ?>
                             @foreach($data['opening_stock'] as $stock)
                             <tr>
                                 <td>{{ $stock->name }}</td>
                                 <td>{{ $stock->current_stock }}</td>
-                                <td class="text-right">{{ number_format($stock->cost_price, 2) }}</td>
+                                <td class="text-right">{{ number_format($stock->selling_price, 2) }}</td>
                             </tr>
+                            <?php $totalOpeningStock += ($stock->current_stock * $stock->selling_price) ?>
                             @endforeach
+                            <?php $totalOpeningStock ?>
                         </table>
                     </div>
 
@@ -79,9 +83,12 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 <script>
     total = '<?php echo $total_sales; ?>'
+    OpeningStock = '<?php echo $totalOpeningStock; ?>'
     newTotal = numeral(total).format('0,0.00');
+    totalOpeningStock = numeral(OpeningStock).format('0,0.00');
     $(document).ready(function() {
         $("#total").text(newTotal);
+        $("#totalOpeningStock").text(totalOpeningStock);
     });
 </script>
 <style>
