@@ -14,8 +14,14 @@
                 <?php $dates = Session::get('dates') ?>
 
                 <ul class="list-group">
-                    <li class="list-group-item">NET SALES FOR {{ $dates['start_date'] }} - {{ $dates['end_date'] }} <span id="total" class="badge"></span></li>
                     <li class="list-group-item">TOTAL OPENING STOCK <span id="totalOpeningStock" class="badge"></span></li>
+                    <li class="list-group-item">TOTAL PURCHASES <span id="totalPurchases" class="badge"></span></li>
+                    <li class="list-group-item">TOTAL CLOSING STOCK <span id="totalClosingStock" class="badge"></span></li>
+                    <li class="list-group-item">TOTAL SALES = ( [TOTAL OPENING STOCK + TOTAL PURCHASES] - TOTAL CLOSING STOCK) <span id="totalSales" class="badge"></span></li>
+                    <li class="list-group-item">TOTAL COST PRICE<span id="costPrice" class="badge"></span></li>
+                    <li class="list-group-item">GROSS PROFIT = (TOTAL SALES - TOTAL COST PRICE)<span id="grossProfit" class="badge"></span></li>
+                    <li class="list-group-item">5% MARKUP<span id="markup" class="badge"></span></li>
+                    <li class="list-group-item">NET PROFIT<span id="netProfit" class="badge"></span></li>
                     <!-- <li class="list-group-item">CLOSING STOCK <span class="badge">5</span></li>
                     <li class="list-group-item">TOTAL SALES <span class="badge">3</span></li> -->
                 </ul>
@@ -33,7 +39,11 @@
                                 <th>opening stock</th>
                                 <th>selling price</th>
                             </tr>
-                            <?php $totalOpeningStock = 0; ?>
+                            <?php
+                            $totalOpeningStock = 0;
+                            $openingStockCost = 0;
+
+                            ?>
                             @foreach($data['opening_stock'] as $stock)
                             <tr>
                                 <td>{{ $stock->name }}</td>
@@ -41,35 +51,54 @@
                                 <td class="text-right">{{ number_format($stock->selling_price, 2) }}</td>
                             </tr>
                             <?php $totalOpeningStock += ($stock->current_stock * $stock->selling_price) ?>
+                            <?php $openingStockCost += ($stock->current_stock * $stock->cost_price) ?>
                             @endforeach
-                            <?php $totalOpeningStock ?>
+                            <?php $totalOpeningStock; ?>
                         </table>
                     </div>
 
-                    <div class="col-md-1"></div>
-                    <div class="col-md-6">
-                        <table class="table table-striped">
+                    <div class="col-md-5">
+                        <table class="table table-bordered">
                             <tr>
-                                <th>date collected</th>
+                                <th colspan="3" class="text-center">Closing Stock for {{ $dates['end_date'] }}</th>
+                            </tr>
+                            <tr>
                                 <th>drug</th>
-                                <th>quantity (unit)</th>
-                                <th>collecting unit/ dept.</th>
-                                <th>unit cost price</th>
+                                <th>closing stock</th>
+                                <th>selling price</th>
                             </tr>
-                            <?php $total_sales = 0; ?>
-                            @foreach($data['sales'] as $sales)
+                            <?php $totalClosingStock = 0; $closingStockCost = 0; ?>
+                            @foreach($data['closing_stock'] as $stock)
                             <tr>
-                                <td>{{ $sales->created_at->toDateString() }}</td>
-                                <td>{{ $sales->name }}</td>
-                                <td>{{ $sales->quantity }}</td>
-                                <td>{{ $sales->collecting_unit }}</td>
-                                <td>{{ $sales->cost_price }}</td>
-                                <?php $total_sales += $sales->cost_price * $sales->quantity; ?>
+                                <td>{{ $stock->name }}</td>
+                                <td>{{ $stock->current_stock }}</td>
+                                <td class="text-right">{{ number_format($stock->selling_price, 2) }}</td>
                             </tr>
+                            <?php $totalClosingStock += ($stock->current_stock * $stock->selling_price) ?>
+                            <?php $closingStockCost += ($stock->current_stock * $stock->cost_price) ?>
                             @endforeach
-                            <?php $total_sales; ?>
+                            <?php $totalClosingStock; ?>
                         </table>
                     </div>
+                    <!-- PURCHASES TABLE -->
+
+                    <?php $totalPurchases = 0; $purchaseCost = 0; ?>
+                    @foreach($data['purchases'] as $purchase)
+
+                    <?php $totalPurchases += ($purchase->quantity * $purchase->selling_price) ?>
+                    <?php $purchaseCost += ($purchase->quantity * $purchase->cprice) ?>
+                    @endforeach
+                    <?php
+                    // getting cost of sales
+                    $costOfSales = ($totalOpeningStock + $totalPurchases) - $totalClosingStock;
+                    // getting total cost price
+                    $costPrice = ($openingStockCost + $purchaseCost) - $closingStockCost;
+                    // getting gross sales
+                    $grossProfit = $costOfSales - $costPrice;
+                    $markup = $grossProfit * 0.05;
+                    // net profit
+                    $netProfit = $grossProfit - $markup;
+                    ?>
 
                 </div>
 
@@ -82,13 +111,31 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 <script>
-    total = '<?php echo $total_sales; ?>'
     OpeningStock = '<?php echo $totalOpeningStock; ?>'
-    newTotal = numeral(total).format('0,0.00');
+    Purchases = '<?php echo $totalPurchases; ?>'
+    ClosingStock = '<?php echo $totalClosingStock; ?>'
+    costOfSales = '<?php echo $costOfSales; ?>'
+    costPrice = '<?php echo $costPrice; ?>'
+    grossProfit = '<?php echo $grossProfit; ?>'
+    markup = '<?php echo $markup; ?>'
+    netProfit = '<?php echo $netProfit; ?>'
     totalOpeningStock = numeral(OpeningStock).format('0,0.00');
+    totalClosingStock = numeral(ClosingStock).format('0,0.00');
+    totalPurchases = numeral(Purchases).format('0,0.00');
+    totalSales = numeral(costOfSales).format('0,0.00');
+    costPrice = numeral(costPrice).format('0,0.00');
+    grossProfit = numeral(grossProfit).format('0,0.00');
+    markup = numeral(markup).format('0,0.00');
+    netProfit = numeral(netProfit).format('0,0.00');
     $(document).ready(function() {
-        $("#total").text(newTotal);
         $("#totalOpeningStock").text(totalOpeningStock);
+        $("#totalClosingStock").text(totalClosingStock);
+        $("#totalPurchases").text(totalPurchases);
+        $("#totalSales").text(totalSales);
+        $("#costPrice").text(costPrice);
+        $("#grossProfit").text(grossProfit);
+        $("#markup").text(markup);
+        $("#netProfit").text(netProfit);
     });
 </script>
 <style>
@@ -100,7 +147,7 @@
         border-bottom: 3px double #000000;
     }
 
-    .badge{
+    .badge {
         font-size: 20px;
     }
 </style>
