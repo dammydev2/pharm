@@ -923,4 +923,14 @@ class HomeController extends Controller
     return redirect('allSalesReport');
   }
 
+  public function allSalesReport()
+  {
+    $request = Session::get('dates');
+    $user = \Auth::user()->name;
+    $allPayment = Payment::whereDate('created_at', '>=', $request['start_date'])
+    ->whereDate('created_at', '<=', $request['end_date'])
+    ->where('seller', $user)->get();
+    return view('report.allSalesReport')->with('data', $allPayment);
+  }
+
 }
