@@ -594,7 +594,7 @@ class HomeController extends Controller
     $data = Payment::where('created_at', '>=', $date)
       ->where('created_at', '<=', $date2)
       ->where('nhis', $stat)
-      ->where('status', 'normal')->paginate(25);
+      ->where('status', 'normal')->get();
     }
     if($stat === 'Unclaimed waiver' || $stat === 'retainership'){
       $data = Payment::where('created_at', '>=', $date)
