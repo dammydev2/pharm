@@ -12,4 +12,9 @@ class Sale extends Model
     {
         return $this->hasOne(Payment::class, 'rec');
     }
+
+    public function drug()
+    {
+        return $this->hasOne(Drug::class, 'name', 'name');
+    }
 }
