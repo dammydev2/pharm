@@ -22,6 +22,8 @@
                     <tr>
                         <th>Drug Name</th>
                         <th>Qty in store (units)</th>
+                        <th>Cost Price (units)</th>
+                        <th>Selling Price (units)</th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -37,6 +39,8 @@
                             {{ number_format($row->qtyonhand, 0) }} 
                             </span>
                         </td>
+                        <td>{{ $row->cprice }}</td>
+                        <td>{{ $row->selling_price }}</td>
                         <td><a href="{{ url('/stockadd/'.$row->id) }}">Add Stock</a></td>
                         <td><a href="{{ url('/order/'.$row->id) }}">Order</a></td>
                         <td><a href="{{ url('/stockedit/'.$row->id) }}">Edit</a></td>

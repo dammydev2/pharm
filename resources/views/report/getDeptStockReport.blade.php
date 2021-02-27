@@ -20,7 +20,7 @@
                         <th>date collected</th>
                         <th>drug</th>
                         <th>units collected</th>
-                        <th>unit price</th>
+                        <th>unit selling price</th>
                         <th>net amount</th>
                     </tr>
                     <?php $gross_total = 0; ?>
@@ -30,8 +30,8 @@
                         <th>{{ $order->created_at->toDateString() }}</th>
                         <th>{{ $order->name }}</th>
                         <th>{{ $order->quantity }}</th>
-                        <th class="text-right">{{ number_format($order->cost_price, 2) }}</th>
-                        <th class="text-right">{{ number_format($net_total = $order->cost_price * $order->quantity, 2) }}</th>
+                        <th class="text-right">{{ number_format($order->selling_price, 2) }}</th>
+                        <th class="text-right">{{ number_format($net_total = $order->selling_price * $order->quantity, 2) }}</th>
                         <?php $gross_total += $net_total; ?>
                     </tr>
                     @endforeach

@@ -106,8 +106,14 @@ Route::get('/return', 'HomeController@return');
 Route::get('/thereturn', 'HomeController@thereturn');
 
 Route::get('/order/{id}', 'HomeController@order');
+Route::get('/displayRecNum', 'HomeController@displayRecNum');
+Route::get('/returnReceipt', 'HomeController@returnReceipt');
+Route::get('/totalSales', 'HomeController@totalSales');
+Route::get('/allSalesReport', 'HomeController@allSalesReport');
 
 Route::post('/sale_enter', 'HomeController@sale_enter');
+Route::post('/removeReceipt', 'HomeController@removeReceipt');
+Route::post('/gatAllSalesReport', 'HomeController@gatAllSalesReport');
 
 Route::post('/updatestock', 'HomeController@updatestock');
 
@@ -118,6 +124,7 @@ Route::post('/searchrec', 'HomeController@searchrec');
 Route::post('/enterstock', 'HomeController@enterstock');
 
 Route::post('/entertendered', 'HomeController@entertendered');
+Route::post('/enterDetails', 'HomeController@enterDetails');
 
 Route::post('/checkprofit', 'HomeController@checkprofit');
 

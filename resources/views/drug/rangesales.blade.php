@@ -65,7 +65,6 @@
                         <th class="text-right"><b><?php echo number_format($grossProfit - $totalNetProfit, 2); ?></b></th>
                     </tr>
 
-                    {{ $data->links() }}
                 </table>
 
             </div>

@@ -44,32 +44,40 @@ class HomeController extends Controller
 
   public function adddrug()
   {
-    return view('drug.adddrug');
+    $drugs = Store::orderBy('name', 'asc')->get();
+    return view('drug.adddrug')->with('drugs', $drugs);
   }
 
   public function enterdrug(Request $request)
   {
     $request->validate([
-      'name' => 'required|unique:drugs',
-      'markup' => 'required',
-      'price' => 'required',
+      'name' => 'required',
     ]);
-    $newMarkup = $request['markup'] + 5;
-    // dd($request);
-    $cost = ($newMarkup / 100) * $request['price'] + $request['price'];
+    // getting the cost and selling price
+    $details = Store::where('id', $request['name'])->first();
+    // checking if drug exist for department
+    $drugName = $details->name;
+    $chk = Drug::where('name', $drugName)
+    ->where('type', \Auth::User()->type)->first();
+    if($chk){
+      Session::flash('error', 'drug already exist');
+      return redirect()->back();
+    }
+    
     //sdd($request['price']);
     Drug::create([
-      'name' => $request['name'],
-      'markup' => $newMarkup,
-      'cprice' => $request['price'],
-      'sprice' => $cost,
+      'name' => $details->name,
+      'markup' => $details->markup,
+      'cprice' => $details->cprice,
+      'sprice' => $details->selling_price,
+      'type' => \Auth::User()->type
     ]);
     return redirect('drug');
   }
 
   public function drug()
   {
-    $data = Drug::orderBy('qty', 'desc')->get();
+    $data = Drug::orderBy('name', 'asc')->where('type', \Auth::User()->type)->get();
     return view('drug.drug', compact('data'));
   }
 
@@ -153,6 +161,7 @@ class HomeController extends Controller
       $query = $request->get('query');
       if ($query != '') {
         $data = Drug::where('name', 'like', '%' . $query . '%')
+        ->where('type', \Auth::User()->type)
           //->orWhere('name', 'like', '%'.$query.'%')
           /** ->orWhere('City', 'like', '%'.$query.'%')
          ->orWhere('PostalCode', 'like', '%'.$query.'%')
@@ -196,8 +205,16 @@ class HomeController extends Controller
   public function sale_enter(Request $request)
   {
     //getting the receipt number
+    $type = \Auth::User()->type;
+    if($type === 'In-patient'){
+      $first = 'P';
+    }
+    else{
+      $first = "S";
+    }
     $data = Sale::orderBy('id', 'desc')->first();
-    $rec = $data->id + 1000;
+    $num = $data->id + 1000;
+    $rec = $first.$num;
     $num = count($_POST['name']);
     for ($i = 0; $i < $num; $i++) {
       Sale::create([
@@ -210,11 +227,11 @@ class HomeController extends Controller
         'rec' => $rec,
       ]);
       //subtracting quantity brought from stock
-      $newstock[$i] = $request['qty2'][$i] - $request['qty'][$i];
-      Drug::where('id', $request['stockid'][$i])
-        ->update([
-          'qty' => $newstock[$i]
-        ]);
+      // $newstock[$i] = $request['qty2'][$i] - $request['qty'][$i];
+      // Drug::where('id', $request['stockid'][$i])
+      //   ->update([
+      //     'qty' => $newstock[$i]
+      //   ]);
     }
     Session::put('rec', $rec);
     return redirect('recnum');
@@ -246,17 +263,10 @@ class HomeController extends Controller
     return redirect('tendered');
   }
 
-  public function tendered()
-  {
-    $rec = Session::get('rec');
-    $data = Sale::where('rec', $rec)->get();
-    return view('drug.tendered', compact('data'));
-  }
-
-  public function entertendered(Request $request)
+  public function enterDetails(Request $request)
   {
     $request->validate([
-      'amount' => 'required',
+      'name' => 'required|string',
     ]);
     if ($request['percent'] == 0) {
       $nhis = 'nil';
@@ -274,7 +284,48 @@ class HomeController extends Controller
       'balance' => $request['balance'],
       'status' => $request['status'],
       'seller' => \Auth::User()->name,
+      'type' => \Auth::User()->type
     ]);
+    return redirect('displayRecNum');
+  }
+
+  public function displayRecNum()
+  {
+    $rec = Session::get('rec');
+    $data = Payment::where('rec', $rec)->first();
+    return view('drug.displayRecNum', compact('data'));
+  }
+
+  public function tendered()
+  {
+    $rec = Session::get('rec');
+    $data = Payment::where('rec', $rec)->first();
+    return view('drug.tendered', compact('data'));
+  }
+
+  public function entertendered(Request $request)
+  {
+    $request->validate([
+      'amount' => 'required',
+    ]);
+
+    // saving the updated drugs
+    $num = count($request['drug_name']);
+    for ($i = 0; $i < $num; $i++) {
+      $newQty[$i] = $request['quantity_in_stock'][$i] - $request['quantity'][$i];
+      Drug::where('name', $request['drug_name'][$i])
+      ->update([
+        'qty' => $newQty[$i]
+      ]);
+    }
+
+    $rec = Session::get('rec');
+    Payment::where('rec', $rec)
+      ->update([
+        'amount' => $request['amount'],
+        'balance' => $request['balance'],
+        'payment_status' => 'paid'
+      ]);
     return redirect('receipt');
   }
 
@@ -316,7 +367,7 @@ class HomeController extends Controller
     $date2 = Session::get('date2');
     $data = Payment::where('created_at', '>=', $date)
       ->where('created_at', '<=', $date2)
-      ->where('return', 0)->paginate(25);
+      ->where('return', 0)->where('type', \Auth::User()->type)->get();
     return view('drug.rangesales', compact('data'));
   }
 
@@ -333,11 +384,12 @@ class HomeController extends Controller
         DailyStock::create([
           'name' => $stock->name,
           'cost_price' => $stock->cprice,
+          'selling_price' => $stock->selling_price,
           'current_stock' => $stock->qtyonhand,
         ]);
       }
     }
-    $data = Store::where('type', \Auth::User()->type)->orderBy('qtyonhand', 'desc')->paginate(200);
+    $data = Store::where('type', \Auth::User()->type)->orderBy('name', 'asc')->paginate(200);
     return view('drug.stock', compact('data'));
   }
 
@@ -357,22 +409,28 @@ class HomeController extends Controller
       'name' => 'required',
       'reorder' => 'required',
       'cprice' => 'required',
+      'markup' => 'required|integer',
     ]);
     $chk = Store::where('name', $request['name'])
       ->where('type', \Auth::User()->type)->get();
     if (!$chk->isEmpty()) {
       return Redirect::back()->withErrors(['Drug already added']);
     }
+    $newMarkup = $request['markup'] + 5;
+    $selling_price = ($newMarkup / 100) * $request['cprice'] + $request['cprice'];
     Store::create([
       'name' => $request['name'],
       'cprice' => $request['cprice'],
+      'selling_price' => $selling_price,
       'reorder' => $request['reorder'],
+      'markup' => $request['markup'],
       'type' => \Auth::User()->type,
     ]);
     DailyStock::create([
       'name' => $request['name'],
       'cost_price' => $request['cprice'],
-      'current_stock' => 0
+      'current_stock' => 0,
+      'selling_price' => $selling_price,
     ]);
     Session::flash('success', 'Drug added successfully');
     return redirect('stock');
@@ -390,12 +448,14 @@ class HomeController extends Controller
       'name' => 'required',
       'qty' => 'required',
       'cprice' => 'required',
+      'selling_price' => 'required|integer',
     ]);
     Store::where('id', $request['id'])
       ->update([
         'name' => $request['name'],
         'qtyonhand' => $request['qty'],
         'cprice' => $request['cprice'],
+        'selling_price' => $request['selling_price'],
       ]);
     Session::flash('success', 'Drug updated successfully');
     return redirect('stock');
@@ -412,14 +472,15 @@ class HomeController extends Controller
     $request->validate([
       'name' => 'required',
       'cprice' => 'required',
+      'selling_price' => 'required',
       'quantity' => 'required',
       'exp' => 'required',
     ]);
-    // return $request;
     Storestock::create([
       'name' => $request['name'],
       'cprice' => $request['cprice'],
       'quantity' => $request['quantity'],
+      'selling_price' => $request['selling_price'],
       'exp' => $request['exp'],
       'batch_no' => $request['batch_no'],
       'supplier_name' => $request['supplier_name'],
@@ -431,6 +492,7 @@ class HomeController extends Controller
       ->where('type', \Auth::User()->type)
       ->update([
         'qtyonhand' => $newstock,
+        'selling_price' => $request['selling_price']
       ]);
     // adding it to daily stock
     $getDrug = DailyStock::where('name', $request['name'])->first();
@@ -439,7 +501,8 @@ class HomeController extends Controller
     // updating the newstock
     DailyStock::where('name', $request['name'])
       ->update([
-        'current_stock' => $newStock
+        'current_stock' => $newStock,
+        'selling_price' => $request['selling_price']
       ]);
     Session::flash('success', 'New stock added successfully');
     return redirect('stock');
@@ -561,17 +624,19 @@ class HomeController extends Controller
     $date = Session::get('date');
     $date2 = Session::get('date2');
     $stat = Session::get('stat');
-    if($stat === 'nil' || $stat === 'nhis'){
-    $data = Payment::where('created_at', '>=', $date)
-      ->where('created_at', '<=', $date2)
-      ->where('nhis', $stat)
-      ->where('status', 'normal')->paginate(25);
-    }
-    if($stat === 'Unclaimed waiver' || $stat === 'retainership'){
+    if ($stat === 'nil' || $stat === 'nhis') {
       $data = Payment::where('created_at', '>=', $date)
         ->where('created_at', '<=', $date2)
-        ->where('status', $stat)->paginate(25);
-      }
+        ->where('nhis', $stat)
+        ->where('type', \Auth::User()->type)
+        ->where('status', 'normal')->get();
+    }
+    if ($stat === 'Unclaimed waiver' || $stat === 'retainership') {
+      $data = Payment::where('created_at', '>=', $date)
+        ->where('created_at', '<=', $date2)
+        ->where('type', \Auth::User()->type)
+        ->where('status', $stat)->get();
+    }
     if ($stat == 'nil') {
       Session::put('info', 'non-NHIS');
     } else {
@@ -715,6 +780,13 @@ class HomeController extends Controller
     // getting opening stock
     $data['opening_stock'] = DailyStock::whereDate('created_at', $dates['start_date'])->get();
 
+    // getting closing stock
+    $data['closing_stock'] = DailyStock::whereDate('created_at', $dates['end_date'])->get();
+
+    // getting purchases
+    $data['purchases'] = Storestock::whereDate('created_at', '>=', $dates['start_date'])
+      ->whereDate('created_at', '<=', $dates['end_date'])->orderBy('created_at', 'asc')->get();
+
     // getting sales
     $data['sales'] = Order::whereDate('created_at', '>=', $dates['start_date'])
       ->whereDate('created_at', '<=', $dates['end_date'])->orderBy('created_at', 'asc')->get();
@@ -789,10 +861,10 @@ class HomeController extends Controller
   {
     $request = Session::get('request');
     $orders = Order::where('collecting_unit', $request['department'])
-    ->whereDate('created_at', '>=', $request['start_date'])
-    ->whereDate('created_at', '<=', $request['end_date'])
-    ->orderBy('created_at', 'asc')->get();
-    return view('report.getDeptStockReport')->with('orders', $orders)->with('sn',1);
+      ->whereDate('created_at', '>=', $request['start_date'])
+      ->whereDate('created_at', '<=', $request['end_date'])
+      ->orderBy('created_at', 'asc')->get();
+    return view('report.getDeptStockReport')->with('orders', $orders)->with('sn', 1);
   }
 
   public function multipleMonths()
@@ -817,11 +889,10 @@ class HomeController extends Controller
     $start_month = $request['start_month'];
     $end_month = $request['end_month'];
     $year = $request['year'];
-    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders WHERE MONTH(created_at) >= ' . $start_month .' AND MONTH(created_at) <= ' . $end_month . ' && YEAR(created_at) = ' . $year . ' GROUP BY name ORDER BY id ASC');
+    $consumptions = DB::select('SELECT name, collector, cost_price, collecting_unit, quantity, SUM(quantity) FROM orders WHERE MONTH(created_at) >= ' . $start_month . ' AND MONTH(created_at) <= ' . $end_month . ' && YEAR(created_at) = ' . $year . ' GROUP BY name ORDER BY id ASC');
     $consumptions = json_decode(json_encode($consumptions), true);
-    
+
     return view('report.getMultipleReport')->with('consumptions', $consumptions)->with('sn', 1);
-  
   }
 
   public function singleMonth()
@@ -853,7 +924,53 @@ class HomeController extends Controller
     $consumptions = json_decode(json_encode($consumptions), true);
 
     return view('report.getSingleConsumption')->with('consumptions', $consumptions)->with('sn', 1);
-  
   }
 
+  public function returnReceipt()
+  {
+    $receipts = Sale::orderBy('id', 'desc')->groupBy('rec')->get();
+    return view('drug.returnReceipt')->with('receipts', $receipts);
+  }
+
+  public function removeReceipt(Request $request)
+  {
+    $request->validate([
+      'rec' => 'required|integer'
+    ]);
+    // checking if the receipt have not been paid
+    $checkPayment = Payment::where('rec', $request['rec'])->where('payment_status', 'paid')->first();
+    if ($checkPayment) {
+      Session::flash('error', 'receipt has been paid');
+      return redirect()->back();
+    }
+    Sale::where('rec', $request['rec'])->delete();
+    Payment::where('rec', $request['rec'])->delete();
+    Session::flash('success', 'details removed successfully');
+    return redirect()->back();
+  }
+
+  public function totalSales()
+  {
+    return view('report.totalSales');
+  }
+
+  public function gatAllSalesReport(Request $request)
+  {
+    $request->validate([
+      'start_date' => 'required',
+      'end_date' => 'required'
+    ]);
+    Session::put('dates', $request->all());
+    return redirect('allSalesReport');
+  }
+
+  public function allSalesReport()
+  {
+    $request = Session::get('dates');
+    $type = \Auth::user()->type;
+    $allPayment = Payment::whereDate('created_at', '>=', $request['start_date'])
+      ->whereDate('created_at', '<=', $request['end_date'])
+      ->where('type', $type)->get();
+    return view('report.allSalesReport')->with('data', $allPayment);
+  }
 }
