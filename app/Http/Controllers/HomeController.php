@@ -156,12 +156,19 @@ class HomeController extends Controller
 
   public function action(Request $request)
   {
+	  $type = \Auth::User()->type;
+	  if($type === 'sales'){
+		  $type = 'substore';
+	  }
+	  else{
+		  $type = \Auth::User()->type;
+	  }
     if ($request->ajax()) {
       $output = '';
       $query = $request->get('query');
       if ($query != '') {
         $data = Drug::where('name', 'like', '%' . $query . '%')
-        ->where('type', \Auth::User()->type)
+        ->where('type', $type)
           //->orWhere('name', 'like', '%'.$query.'%')
           /** ->orWhere('City', 'like', '%'.$query.'%')
          ->orWhere('PostalCode', 'like', '%'.$query.'%')
@@ -210,7 +217,7 @@ class HomeController extends Controller
       $first = 'P';
     }
     else{
-      $first = "S";
+      $first = "D";
     }
     $data = Sale::orderBy('id', 'desc')->first();
     $num = $data->id + 1000;
@@ -935,7 +942,7 @@ class HomeController extends Controller
   public function removeReceipt(Request $request)
   {
     $request->validate([
-      'rec' => 'required|integer'
+      'rec' => 'required'
     ]);
     // checking if the receipt have not been paid
     $checkPayment = Payment::where('rec', $request['rec'])->where('payment_status', 'paid')->first();

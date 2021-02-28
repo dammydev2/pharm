@@ -21,7 +21,6 @@
                     </tr>
                     <tr>
                         <th>Drug Name</th>
-                        <th>Markup</th>
                         <th>Cost Price</th>
                         <th>Selling Price</th>
                         <th>Quantity (units)</th>
@@ -32,7 +31,6 @@
                     @foreach($data as $row)
                     <tr>
                         <td>{{ $row->name }}</td>
-                        <td>{{ $row->markup }}%</td>
                         <td>{{ $row->cprice }}</td>
                         <td>{{ $row->sprice }}</td>
                         <td>{{ $row->qty }}</td>
