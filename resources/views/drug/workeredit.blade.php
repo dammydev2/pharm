@@ -70,8 +70,15 @@
                             <div class="form-group">
                                 <label>Member type</label>
                                 <select class="form-control" name="type">
-                                    <option value="store">Store</option>
-                                    <option value="sales">Sales</option>
+                                    <option value="store">Main Store</option>
+                                    <option value="substore">SubStore</option>
+                                    <option value="sales">Sales/Dispensory</option>
+                                    <option value="payment">Payment</option>
+                                    <option value="substore">Ijoga Orile</option>
+                                    <option value="In-patient">In-patient</option>
+                                    <option value="substore">Cardio Unit</option>
+                                    <option value="substore">4-Wing Block</option>
+                                    <option value="substore">ETR</option>
                                 </select>
                             </div>
 
