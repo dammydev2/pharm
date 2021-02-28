@@ -37,6 +37,8 @@
                             <option value="nhis">NHIS</option>
                             <option value="Unclaimed waiver">Unclaimed waiver</option>
                             <option value="retainership">Retainership</option>
+                            <option value="waiver">waiver</option>
+                            <option value="ward supply">ward supply</option>
                         </select>
                     </div>
 
