@@ -21,7 +21,7 @@
                         <th>drug</th>
                         <th>units collected</th>
                         <th>unit selling price</th>
-                        <th>net amount</th>
+                        <th> amount</th>
                     </tr>
                     <?php $gross_total = 0; ?>
                     @foreach($orders as $key => $order)

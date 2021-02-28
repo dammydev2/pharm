@@ -34,7 +34,7 @@
            <thead>
             <tr>
              <th>Item Name</th>
-             <th>Qty in stock</th>
+             <th class="text-danger">Qty in stock</th>
              <th>Qty</th>
              <th>Amt</th>
              <th>Total Amt</th>

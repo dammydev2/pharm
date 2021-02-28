@@ -13,10 +13,10 @@
 @if(\Auth::User()->type === 'store')
 <li><a href="{{ url('/stock') }}">Main Store/Stock</a></li>
 <li><a href="{{ url('/stockReport') }}">Stock/Sales Report</a></li>
-<li><a href="{{ url('/monthlyConsumption') }}">Monthly Consumption/forecast</a></li>
-<li><a href="{{ url('/deptStockReport') }}">Actual Sales by Department</a></li>
-<li><a href="{{ url('/multipleMonths') }}">Multiple Months Consuption</a></li>
-<li><a href="{{ url('/singleMonth') }}">Single Month Consuption</a></li>
+<li><a href="{{ url('/monthlyConsumption') }}">Monthly Consumption/Forecast</a></li>
+<li><a href="{{ url('/deptStockReport') }}">Actual Sales by Units</a></li>
+<li><a href="{{ url('/multipleMonths') }}">Multiple Months Consumption</a></li>
+<li><a href="{{ url('/singleMonth') }}">Single Month Consumption</a></li>
 @endif
 
 @if(\Auth::User()->type == 'substore' || \Auth::User()->type == 'In-patient')
