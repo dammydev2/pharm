@@ -398,7 +398,7 @@ class HomeController extends Controller
         ]);
       }
     }
-    $data = Store::where('type', \Auth::User()->type)->orderBy('name', 'asc')->paginate(200);
+    $data = Store::orderBy('name', 'asc')->paginate(200);
     return view('drug.stock', compact('data'));
   }
 

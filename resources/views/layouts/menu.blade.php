@@ -19,6 +19,10 @@
 <li><a href="{{ url('/singleMonth') }}">Single Month Consumption</a></li>
 @endif
 
+@if(\Auth::User()->type === 'price autenticator')
+<li><a href="{{ url('/stock') }}">Main Store/Stock</a></li>
+@endif
+
 @if(\Auth::User()->type == 'substore' || \Auth::User()->type == 'In-patient')
 <li><a href="{{ url('/drug') }}">Drug/Stock</a></li>
 @endif
