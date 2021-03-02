@@ -79,6 +79,7 @@
                                     <option value="substore">Cardio Unit</option>
                                     <option value="substore">4-Wing Block</option>
                                     <option value="substore">ETR</option>
+                                    <option value="price autenticator">Price Autenticator</option>
                                 </select>
                             </div>
 
