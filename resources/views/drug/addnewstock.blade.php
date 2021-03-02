@@ -41,6 +41,11 @@
                     </div>  
 
 					<div class="form-group">
+    					<label>Folio no</label>
+    					<input type="text" name="folio_no" placeholder="folio no"  class="form-control">
+    				</div>
+
+					<div class="form-group">
     					<label>Markup</label>
                         <select name="markup" class="form-control">
                             @for($i=0; $i<=100; $i++)

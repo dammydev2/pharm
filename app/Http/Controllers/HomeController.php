@@ -69,6 +69,7 @@ class HomeController extends Controller
       'name' => $details->name,
       'markup' => $details->markup,
       'cprice' => $details->cprice,
+      'folio_no' => $details->folio_no,
       'sprice' => $details->selling_price,
       'type' => \Auth::User()->type
     ]);
@@ -187,6 +188,7 @@ class HomeController extends Controller
 
           <div class="col-sm-12 rst"
           data-sprice = "' . $row->sprice . '"
+          data-folio_no = "' . $row->folio_no . '"
           data-c_price = "' . $row->cprice . '"
           data-qty2 = "' . $row->qty . '"
           data-id = "' . $row->id . '"
@@ -416,6 +418,7 @@ class HomeController extends Controller
       'name' => 'required',
       'reorder' => 'required',
       'cprice' => 'required',
+      'folio_no' => 'required',
       'markup' => 'required|integer',
     ]);
     $chk = Store::where('name', $request['name'])
@@ -431,6 +434,7 @@ class HomeController extends Controller
       'selling_price' => $selling_price,
       'reorder' => $request['reorder'],
       'markup' => $request['markup'],
+      'folio_no' => $request['folio_no'],
       'type' => \Auth::User()->type,
     ]);
     DailyStock::create([
@@ -455,6 +459,7 @@ class HomeController extends Controller
       'name' => 'required',
       'qty' => 'required',
       'cprice' => 'required',
+      'folio_no' => 'required',
       'selling_price' => 'required|integer',
     ]);
     Store::where('id', $request['id'])
@@ -462,6 +467,7 @@ class HomeController extends Controller
         'name' => $request['name'],
         'qtyonhand' => $request['qty'],
         'cprice' => $request['cprice'],
+        'folio_no' => $request['folio_no'],
         'selling_price' => $request['selling_price'],
       ]);
     Session::flash('success', 'Drug updated successfully');

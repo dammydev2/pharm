@@ -21,6 +21,7 @@
                     </tr>
                     <tr>
                         <th>Drug Name</th>
+                        <th>Folio No.</th>
                         <th>Qty in store (units)</th>
                         <th>Cost Price (units)</th>
                         <th>Selling Price (units)</th>
@@ -32,6 +33,7 @@
                      @foreach($data as $row)
                     <tr>
                         <td>{{ $row->name }}</td>
+                        <td>{{ $row->folio_no }}</td>
                         <td>
                             @if( ($row->qtyonhand ) < $row->reorder)
                             <span style="color: red;">

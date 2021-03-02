@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddFolioNoToStoresTable extends Migration
+class AddFolioNoToDrugsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddFolioNoToStoresTable extends Migration
      */
     public function up()
     {
-        Schema::table('stores', function (Blueprint $table) {
+        Schema::table('drugs', function (Blueprint $table) {
             $table->string('folio_no');
         });
     }
@@ -25,7 +25,7 @@ class AddFolioNoToStoresTable extends Migration
      */
     public function down()
     {
-        Schema::table('stores', function (Blueprint $table) {
+        Schema::table('drugs', function (Blueprint $table) {
             $table->dropColumn('folio_no');
         });
     }
