@@ -26,6 +26,10 @@
 <li><a href="{{ url('/stock') }}">Main Store/Stock</a></li>
 @endif
 
+@if(\Auth::User()->type === 'auditor')
+<li><a href="{{ url('/audit') }}">Audit</a></li>
+@endif
+
 <!-- @if(\Auth::User()->type == 'substore' || \Auth::User()->type == 'In-patient')
 <li><a href="{{ url('/drug') }}">Drug/Stock</a></li>
 @endif -->

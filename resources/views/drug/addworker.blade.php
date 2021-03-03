@@ -66,7 +66,7 @@
                                 <label>Member type</label>
                                 <select class="form-control" name="type">
                                     <option value="store">Main Store</option>
-                                    <option value="substore">SubStore</option>
+                                    <!-- <option value="substore">SubStore</option> -->
                                     <option value="sales">Sales/Dispensory</option>
                                     <option value="payment">Payment</option>
                                     <option value="substore">Ijoga Orile</option>
@@ -75,6 +75,7 @@
                                     <option value="substore">4-Wing Block</option>
                                     <option value="substore">ETR</option>
                                     <option value="price autenticator">Price Autenticator</option>
+                                    <option value="auditor">Auditor</option>
                                 </select>
                             </div>
 

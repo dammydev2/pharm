@@ -12,6 +12,7 @@ use App\Payment;
 use App\Storestock;
 use App\Order;
 use App\DailyStock;
+use App\Audit;
 use Session;
 use DB;
 use Hash;
@@ -1103,6 +1104,36 @@ class HomeController extends Controller
       ->whereDate('exp', '<=', $dates['end_date'])
       ->orderBy('exp', 'asc')->get();
     return view('drug.showExpiredDrugs')->with('expiredDrugs', $expiredDrugs)->with('sn', 1);
+  }
+
+  public function audit()
+  {
+    $allDrugs = Store::OrderBy('name', 'asc')->get();
+    return view('drug.audit')->with('allDrugs', $allDrugs);
+  }
+
+  public function enterAudit(Request $request)
+  {
+    $num = count($request['name']);
+    for($i=0; $i < $num; $i++){
+      Audit::create([
+        'name' => $request['name'][$i],
+        'currently_at_hand' => $request['currently_at_hand'][$i],
+        'folio_no' => $request['folio_no'][$i],
+        'cost_price' => $request['cost_price'][$i],
+        'at_hand' => $request['at_hand'][$i],
+        'auditor' => \Auth::User()->name
+      ]);
+    }
+    return redirect('auditReport');
+  }
+
+  public function auditReport()
+  {
+    $today = date('Y-m-d');
+    $audits = Audit::whereDate('created_at', $today)
+    ->orderBy('name', 'asc')->get();
+    return view('drug.auditReport')->with('audits',$audits);
   }
 
 }
