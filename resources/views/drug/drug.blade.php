@@ -21,24 +21,24 @@
                     </tr>
                     <tr>
                         <th>Drug Name</th>
-                        <th>Markup</th>
+                        <th>Folio No.</th>
                         <th>Cost Price</th>
                         <th>Selling Price</th>
                         <th>Quantity (units)</th>
+                        <!-- <th></th>
                         <th></th>
-                        <th></th>
-                        <th></th>
+                        <th></th> -->
                     </tr>
                     @foreach($data as $row)
                     <tr>
                         <td>{{ $row->name }}</td>
-                        <td>{{ $row->markup }}%</td>
+                        <td>{{ $row->folio_no }}</td>
                         <td>{{ $row->cprice }}</td>
                         <td>{{ $row->sprice }}</td>
                         <td>{{ $row->qty }}</td>
-                        <td><a href="{{ url('/drugadd/'.$row->id) }}">Add Stock</a></td>
+                        <!-- <td><a href="{{ url('/drugadd/'.$row->id) }}">Add Stock</a></td>
                         <td><a href="{{ url('/drugedit/'.$row->id) }}">Edit</a></td>
-                        <td><a href="{{ url('/drugbreakdown/'.$row->id) }}">Breakdown</a></td>
+                        <td><a href="{{ url('/drugbreakdown/'.$row->id) }}">Breakdown</a></td> -->
                     </tr>
                     @endforeach
                 </table>

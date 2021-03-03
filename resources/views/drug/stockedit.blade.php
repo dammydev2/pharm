@@ -25,6 +25,11 @@
                         <input type="text" value="{{ $row->name }}" name="name"  class="form-control">
                     </div>
 
+					<div class="form-group">
+                        <label>Folio No.</label>
+                        <input type="text" value="{{ $row->folio_no }}" name="folio_no"  class="form-control">
+                    </div>
+
                     <!-- <div class="form-group">
     					<label>Bulk form</label>
     					<input type="text" name="bulk" value="{{ $row->bulk }}" placeholder="e.g. carton, sachet"  class="form-control">

@@ -14,13 +14,16 @@
 
     			<table class="table table-bordered">
                     <tr>
+                    @if(\Auth::User()->type === 'price autenticator')
                         <td colspan="3"><center><a href="{{ url('/addnewstock') }}" class="btn btn-primary">Add Diffrent/ Fresh Drug</a></center></td>
+                    @endif
                     </tr>
                     <tr>
                         <th colspan="6"><center>All Stock as at {{ date('D d/m/Y') }}</center></th>
                     </tr>
                     <tr>
                         <th>Drug Name</th>
+                        <th>Folio No.</th>
                         <th>Qty in store (units)</th>
                         <th>Cost Price (units)</th>
                         <th>Selling Price (units)</th>
@@ -32,6 +35,7 @@
                      @foreach($data as $row)
                     <tr>
                         <td>{{ $row->name }}</td>
+                        <td>{{ $row->folio_no }}</td>
                         <td>
                             @if( ($row->qtyonhand ) < $row->reorder)
                             <span style="color: red;">
@@ -43,7 +47,9 @@
                         <td>{{ $row->selling_price }}</td>
                         <td><a href="{{ url('/stockadd/'.$row->id) }}">Add Stock</a></td>
                         <td><a href="{{ url('/order/'.$row->id) }}">Order</a></td>
+                        @if(\Auth::User()->type === 'price autenticator')
                         <td><a href="{{ url('/stockedit/'.$row->id) }}">Edit</a></td>
+                        @endif
                         <td><a href="{{ url('/stockbreakdown/'.$row->id) }}">Breakdown</a></td>
                     </tr>
                     @endforeach

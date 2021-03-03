@@ -52,12 +52,17 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Phone N0.</label>
+                    <input type="text" name="phone_no" class="form-control">
+                </div>
+
+                <div class="form-group">
                     <label>NHIS %</label>
                     <input type="number" required onkeyup="check()" id="percent" name="percent" class="form-control">
                 </div>
 
                 <div class="form-group">
-                    <label>NHIS no</label>
+                    <label>Clinic/Ward</label>
                     <input type="text" name="nhisno" class="form-control">
                 </div>
 
@@ -70,9 +75,9 @@
                     <label>Status</label>
                     <select name="status" class="form-control" id="">
                         <option>normal</option>
-                        <option>Unclaimed waiver</option>
                         <option>waiver</option>
                         <option>retainership</option>
+                        <option>ward supply</option>
                     </select>
                 </div>
 

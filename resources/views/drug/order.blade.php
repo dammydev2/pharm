@@ -45,12 +45,17 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Expire Date</label>
+                        <input type="date" name="expire_date" class="form-control">
+                    </div>
+
+                    <div class="form-group">
                         <label>Department/Unit/Ward collecting</label>
                         <!-- <input type="text" name="unit" class="form-control"> -->
                         <select name="unit" class="form-control" id="">
                             <option>4-wing block</option>
                             <option>Ijoga Orile</option>
-                            <option>Sub store</option>
+                            <option value="substore">Sub store</option>
                             <option>Cardio unit</option>
                             <option>In-patient</option>
                             <option>ETR</option>
@@ -62,12 +67,19 @@
                         <input type="text" name="cost_price" value="{{ $row->cprice }}" readonly class="form-control">
                     </div>
 
+                    <div class="form-group">
+                        <label>Selling Price (per unit)</label>
+                        <input type="text" name="selling_price" value="{{ $row->selling_price }}" readonly class="form-control">
+                    </div>
+
                     <!-- <div class="form-group">
                         <label>Selling Price (per unit)</label>
                         <input type="text" name="selling_price" value="" class="form-control">
                     </div> -->
 
                     <input type="hidden" name="id" value="{{ $row->id }}" >
+                    <input type="hidden" name="markup" value="{{ $row->markup }}" >
+                    <input type="hidden" name="folio_no" value="{{ $row->folio_no }}" >
 
                     @endforeach
 

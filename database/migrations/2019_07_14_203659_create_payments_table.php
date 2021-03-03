@@ -25,7 +25,7 @@ class CreatePaymentsTable extends Migration
             $table->string('balance');
             $table->string('seller');
             $table->string('return')->default(0);
-            $table->enum('status',['normal','Unclaimed waiver','waiver','retainership'])->default('normal');
+            $table->enum('status',['normal','Unclaimed waiver','ward supply','waiver','retainership'])->default('normal');
             $table->timestamps();
         });
     }
