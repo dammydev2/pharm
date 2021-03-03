@@ -7,6 +7,7 @@
 <li><a href="{{ url('/return') }}">Return Stock</a></li>
 <li><a href="{{ url('/returnReceipt') }}">Return Receipt</a></li>
 <li><a href="{{ url('/totalSales') }}">Total Sales</a></li>
+<li><a href="{{ url('/drug') }}">Drug/Stock</a></li>
 @endif
 
 
@@ -23,9 +24,9 @@
 <li><a href="{{ url('/stock') }}">Main Store/Stock</a></li>
 @endif
 
-@if(\Auth::User()->type == 'substore' || \Auth::User()->type == 'In-patient')
+<!-- @if(\Auth::User()->type == 'substore' || \Auth::User()->type == 'In-patient')
 <li><a href="{{ url('/drug') }}">Drug/Stock</a></li>
-@endif
+@endif -->
 
 @if(\Auth::User()->type == 'payment')
 <li><a href="{{ url('/payment') }}">Payment</a></li>

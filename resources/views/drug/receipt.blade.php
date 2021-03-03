@@ -14,7 +14,8 @@
                    @foreach($data2 as $row2)
                    @endforeach
                    <tr>
-                       <th colspan="4">Customer: {{ $row2->name }}</th>
+                       <th colspan="2">Customer: {{ $row2->name }}</th>
+                       <th colspan="2">Phone No: {{ $row2->phone_no }}</th>
                    </tr>
                    <tr>
                        <th>Qty</th>

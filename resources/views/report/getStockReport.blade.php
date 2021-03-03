@@ -17,11 +17,12 @@
                     <li class="list-group-item">TOTAL OPENING STOCK <span id="totalOpeningStock" class="badge"></span></li>
                     <li class="list-group-item">TOTAL PURCHASES <span id="totalPurchases" class="badge"></span></li>
                     <li class="list-group-item">TOTAL CLOSING STOCK <span id="totalClosingStock" class="badge"></span></li>
-                    <li class="list-group-item">TOTAL SALES = ( [TOTAL OPENING STOCK + TOTAL PURCHASES] - TOTAL CLOSING STOCK) <span id="totalSales" class="badge"></span></li>
+                    <li class="list-group-item">COST OF SALES = ( [TOTAL OPENING STOCK + TOTAL PURCHASES] - TOTAL CLOSING STOCK) <span id="totalSales" class="badge"></span></li>
+                    <li class="list-group-item">TOTAL SALES (DISPENSORY AND IN-PATIENT ONLY) <span class="badge">{{ number_format($data['wing_sales'], 2) }}</span></li>
                     <li class="list-group-item">TOTAL COST PRICE<span id="costPrice" class="badge"></span></li>
-                    <li class="list-group-item">GROSS PROFIT = (TOTAL SALES - TOTAL COST PRICE)<span id="grossProfit" class="badge"></span></li>
-                    <li class="list-group-item">5% MARKUP<span id="markup" class="badge"></span></li>
-                    <li class="list-group-item">NET PROFIT<span id="netProfit" class="badge"></span></li>
+                    <li class="list-group-item">GROSS PROFIT = ( (TOTAL SALES + 4-wings block + Ijoga-Orile + Cardio + ETR) - TOTAL COST PRICE)<span class="badge"></span></li>
+                    <li class="list-group-item">5% MARKUP = GROSS PROFIT * 0.05<span class="badge"></span></li>
+                    <li class="list-group-item">NET PROFIT = GROSS PROFIT - 5% MARKUP<span class="badge"></span></li>
                     <!-- <li class="list-group-item">CLOSING STOCK <span class="badge">5</span></li>
                     <li class="list-group-item">TOTAL SALES <span class="badge">3</span></li> -->
                 </ul>

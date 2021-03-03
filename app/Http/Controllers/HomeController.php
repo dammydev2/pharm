@@ -58,12 +58,12 @@ class HomeController extends Controller
     // checking if drug exist for department
     $drugName = $details->name;
     $chk = Drug::where('name', $drugName)
-    ->where('type', \Auth::User()->type)->first();
-    if($chk){
+      ->where('type', \Auth::User()->type)->first();
+    if ($chk) {
       Session::flash('error', 'drug already exist');
       return redirect()->back();
     }
-    
+
     //sdd($request['price']);
     Drug::create([
       'name' => $details->name,
@@ -78,7 +78,13 @@ class HomeController extends Controller
 
   public function drug()
   {
-    $data = Drug::orderBy('name', 'asc')->where('type', \Auth::User()->type)->get();
+    if(\Auth::User()->type === 'sales'){
+      $type = 'substore';
+    }
+    else{
+      $type = \Auth::User()->type;
+    }
+    $data = Drug::orderBy('name', 'asc')->where('type', $type)->get();
     return view('drug.drug', compact('data'));
   }
 
@@ -157,19 +163,18 @@ class HomeController extends Controller
 
   public function action(Request $request)
   {
-	  $type = \Auth::User()->type;
-	  if($type === 'sales'){
-		  $type = 'substore';
-	  }
-	  else{
-		  $type = \Auth::User()->type;
-	  }
+    $type = \Auth::User()->type;
+    if ($type === 'sales') {
+      $type = 'substore';
+    } else {
+      $type = \Auth::User()->type;
+    }
     if ($request->ajax()) {
       $output = '';
       $query = $request->get('query');
       if ($query != '') {
         $data = Drug::where('name', 'like', '%' . $query . '%')
-        ->where('type', $type)
+          ->where('type', $type)
           //->orWhere('name', 'like', '%'.$query.'%')
           /** ->orWhere('City', 'like', '%'.$query.'%')
          ->orWhere('PostalCode', 'like', '%'.$query.'%')
@@ -215,15 +220,14 @@ class HomeController extends Controller
   {
     //getting the receipt number
     $type = \Auth::User()->type;
-    if($type === 'In-patient'){
+    if ($type === 'In-patient') {
       $first = 'P';
-    }
-    else{
+    } else {
       $first = "D";
     }
     $data = Sale::orderBy('id', 'desc')->first();
     $num = $data->id + 1000;
-    $rec = $first.$num;
+    $rec = $first . $num;
     $num = count($_POST['name']);
     for ($i = 0; $i < $num; $i++) {
       Sale::create([
@@ -276,6 +280,7 @@ class HomeController extends Controller
   {
     $request->validate([
       'name' => 'required|string',
+      'phone_no' => 'required|string|min:11',
     ]);
     if ($request['percent'] == 0) {
       $nhis = 'nil';
@@ -287,6 +292,7 @@ class HomeController extends Controller
       'name' => $request['name'],
       'nhis' => $nhis,
       'nhis_no' => $request['nhisno'],
+      'phone_no' => $request['phone_no'],
       'cprice' => $request['cprice'],
       'sprice' => $request['sprice'],
       'amount' => $request['amount'],
@@ -323,9 +329,9 @@ class HomeController extends Controller
     for ($i = 0; $i < $num; $i++) {
       $newQty[$i] = $request['quantity_in_stock'][$i] - $request['quantity'][$i];
       Drug::where('name', $request['drug_name'][$i])
-      ->update([
-        'qty' => $newQty[$i]
-      ]);
+        ->update([
+          'qty' => $newQty[$i]
+        ]);
     }
 
     $rec = Session::get('rec');
@@ -533,9 +539,11 @@ class HomeController extends Controller
       'quantity' => 'required',
       'collector' => 'required',
       'unit' => 'required',
+      'expire_date' => 'required',
     ]);
 
     $newqty = $request['qtyonhand'] - $request['quantity'];
+    // return $newqty;
     if ($newqty < 0) {
       Session::flash('error', 'Quantity order cannot be greater than quantity on hand');
       return redirect('order/' . $request['id']);
@@ -552,10 +560,56 @@ class HomeController extends Controller
     ]);
 
     Store::where('id', $request['id'])
-      ->where('type', \Auth::User()->type)
+      // ->where('type', \Auth::User()->type)
       ->update([
         'qtyonhand' => $newqty,
       ]);
+
+    if ($request['unit'] === 'In-patient' or $request['unit'] === 'substore') {
+
+      // checking if drug exist for department
+      $drugName = $request['name'];
+      $drugExist = Drug::where('name', $drugName)
+        ->where('type', $request['unit'])->first();
+      if (!$drugExist) {
+        $drug = Drug::create([
+          'name' => $request['name'],
+          'markup' => $request['markup'],
+          'cprice' => $request['cost_price'],
+          'folio_no' => $request['folio_no'],
+          'sprice' => $request['selling_price'],
+          'type' => $request['unit'],
+          'qty' => $request['quantity']
+        ]);
+        $drugID = $drug->id;
+      } else {
+        $oldQuantity = $drugExist->qty;
+        $newqty = $oldQuantity + $request['quantity'];
+        Drug::where('id', $drugExist->id)
+          ->update([
+            'qty' => $newqty,
+            'sprice' => $request['selling_price'],
+            'cprice' => $request['cost_price'],
+            'markup' => $request['markup'],
+          ]);
+          $drugID = $drugExist->id;
+      }
+
+      // adding ionto newstock for department
+      NewStock::create([
+        'name' => $request['name'],
+        'sprice' => $request['selling_price'],
+        'cprice' => $request['cost_price'],
+        'quantity' => $request['quantity'],
+        'exp' => $request['expire_date'],
+        'stockid' => $drugID,
+        'identity' => $request['unit'],
+      ]);
+    }
+
+    //sdd($request['price']);
+
+
     Session::flash('success', 'Order confirm successfully');
     return redirect('stock');
   }
@@ -804,6 +858,9 @@ class HomeController extends Controller
     $data['sales'] = Order::whereDate('created_at', '>=', $dates['start_date'])
       ->whereDate('created_at', '<=', $dates['end_date'])->orderBy('created_at', 'asc')->get();
 
+    // this cost of sales is for inpatient and substore
+    $data['wing_sales'] = Payment::whereDate('created_at', '>=', $dates['start_date'])
+      ->whereDate('created_at', '<=', $dates['end_date'])->sum('sprice');
     // $stocks = DailyStock::whereDate('created_at', '>=', $dates['start_date'])
     //   ->whereDate('created_at', '<=', $endDate)->orderBy('created_at', 'asc')->get();
     // // closing stock
@@ -985,5 +1042,11 @@ class HomeController extends Controller
       ->whereDate('created_at', '<=', $request['end_date'])
       ->where('type', $type)->get();
     return view('report.allSalesReport')->with('data', $allPayment);
+  }
+
+  public function expire()
+  {
+    $today = date('Y-m-d');
+    return $today;
   }
 }
