@@ -39,7 +39,8 @@ class HomeController extends Controller
    */
   public function index()
   {
-    return view('home');
+    $isDrugExpiring = $this->expire();
+    return view('home')->with('isDrugExpiring', $isDrugExpiring);
   }
 
   public function adddrug()
@@ -505,6 +506,7 @@ class HomeController extends Controller
       'supplier_name' => $request['supplier_name'],
       'autenticate' => \Auth::User()->name,
       'type' => \Auth::User()->type,
+      'currently_at_hand' => $request['quantity']
     ]);
     $newstock = $request['quantity'] + $request['qtyonhand'];
     Store::where('id', $request['id'])
@@ -1048,6 +1050,10 @@ class HomeController extends Controller
   {
     $today = date('Y-m-d');
     $next_due_date = date('Y-m-d', strtotime($today. ' +30 days'));
-    return $next_due_date;
+    $soonToExpire = Storestock::whereDate('exp', '>=', $today)
+    ->whereDate('exp', '<=', $next_due_date)
+    ->where('currently_at_hand', '>', 0)
+    ->orderBy('name', 'asc')->get();
+    return $soonToExpire;
   }
 }

@@ -15,7 +15,7 @@ class AddStatusToStorestocksTable extends Migration
     {
         Schema::table('storestocks', function (Blueprint $table) {
             $table->integer('currently_at_hand');
-            $table->enum('status', ['in_stock', 'sold_out']);
+            $table->enum('status', ['in_stock', 'sold_out'])->default('in_stock');
         });
     }
 
