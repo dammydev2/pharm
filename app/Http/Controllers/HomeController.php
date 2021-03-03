@@ -1047,6 +1047,7 @@ class HomeController extends Controller
   public function expire()
   {
     $today = date('Y-m-d');
-    return $today;
+    $next_due_date = date('Y-m-d', strtotime($today. ' +30 days'));
+    return $next_due_date;
   }
 }
