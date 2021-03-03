@@ -111,10 +111,15 @@ Route::get('/returnReceipt', 'HomeController@returnReceipt');
 Route::get('/totalSales', 'HomeController@totalSales');
 Route::get('/allSalesReport', 'HomeController@allSalesReport');
 Route::get('/expire', 'HomeController@expire');
+Route::get('/checkExpiring', 'HomeController@checkExpiring');
+Route::get('/viewExpiredDrugs', 'HomeController@viewExpiredDrugs');
+Route::get('/showExpiredDrugs', 'HomeController@showExpiredDrugs');
 
 Route::post('/sale_enter', 'HomeController@sale_enter');
+Route::post('/checkExpiredDrugs', 'HomeController@checkExpiredDrugs');
 Route::post('/removeReceipt', 'HomeController@removeReceipt');
 Route::post('/gatAllSalesReport', 'HomeController@gatAllSalesReport');
+Route::post('/updateExpiring', 'HomeController@updateExpiring');
 
 Route::post('/updatestock', 'HomeController@updatestock');
 

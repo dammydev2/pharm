@@ -860,6 +860,11 @@ class HomeController extends Controller
     $data['sales'] = Order::whereDate('created_at', '>=', $dates['start_date'])
       ->whereDate('created_at', '<=', $dates['end_date'])->orderBy('created_at', 'asc')->get();
 
+      // expired drugs
+      $data['expiredDrugs'] = Storestock::whereDate('exp', '>=', $dates['start_date'])
+      ->whereDate('exp', '<=', $dates['end_date'])
+      ->orderBy('exp', 'asc')->get();
+
     // this cost of sales is for inpatient and substore
     $data['wing_sales'] = Payment::whereDate('created_at', '>=', $dates['start_date'])
       ->whereDate('created_at', '<=', $dates['end_date'])->sum('sprice');
@@ -1056,4 +1061,48 @@ class HomeController extends Controller
     ->orderBy('name', 'asc')->get();
     return $soonToExpire;
   }
+
+  public function checkExpiring()
+  {
+    $expiringDrugs = $this->expire();
+    return view('drug.checkExpiring')->with('expiringDrugs', $expiringDrugs);
+  }
+
+  public function updateExpiring(Request $request)
+  {
+    // return $request;
+    $num = count($request['name']);
+    for($i=0; $i < $num; $i++){
+      Storestock::where('id', $request['id'][$i])
+      ->update([
+        'currently_at_hand' => $request['currently_at_hand'][$i]
+      ]);
+    }
+    return redirect()->back()->with('success', 'updated successfully');
+  }
+
+  public function viewExpiredDrugs()
+  {
+    return view('drug.viewExpiredDrugs');
+  }
+
+  public function checkExpiredDrugs(Request $request)
+  {
+    $request->validate([
+      'start_date' => 'required',
+      'end_date' => 'required',
+    ]);
+    Session::put('dates', $request->all());
+    return redirect('showExpiredDrugs');
+  }
+
+  public function showExpiredDrugs()
+  {
+    $dates = Session::get('dates');
+    $expiredDrugs = Storestock::whereDate('exp', '>=', $dates['start_date'])
+      ->whereDate('exp', '<=', $dates['end_date'])
+      ->orderBy('exp', 'asc')->get();
+    return view('drug.showExpiredDrugs')->with('expiredDrugs', $expiredDrugs)->with('sn', 1);
+  }
+
 }

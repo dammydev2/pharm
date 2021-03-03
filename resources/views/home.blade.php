@@ -40,7 +40,7 @@
 						</div>
 						<div class="modal-body">
 							<p class="alert alert-danger">ATTENTION: about {{ count($isDrugExpiring) }} drugs are expiring in less than a month time</p>
-							<a href="" class="btn btn-primary"><i class="fa fa-eye"></i> click here to view expiring drugs</a>
+							<a href="{{ url('checkExpiring') }}" class="btn btn-primary"><i class="fa fa-eye"></i> click here to view expiring drugs</a>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
