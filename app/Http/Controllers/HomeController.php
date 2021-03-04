@@ -1136,4 +1136,24 @@ class HomeController extends Controller
     return view('drug.auditReport')->with('audits',$audits);
   }
 
+  public function auditHistory()
+  {
+    $dates = Audit::groupBy('created_at')->get();
+    return view('drug.auditHistory')->with('dates', $dates);
+  }
+
+  public function checkAuditReport(Request $request)
+  {
+    Session::put('date', $request['date']);
+    return redirect('getAuditReport');
+  }
+
+  public function getAuditReport()
+  {
+    $date = Session::get('date');
+    $audits = Audit::whereDate('created_at', $date)
+    ->orderBy('name', 'asc')->get();
+    return view('drug.auditReport')->with('audits',$audits);
+  }
+
 }

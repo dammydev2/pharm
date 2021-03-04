@@ -28,6 +28,7 @@
 
 @if(\Auth::User()->type === 'auditor')
 <li><a href="{{ url('/audit') }}">Audit</a></li>
+<li><a href="{{ url('/auditHistory') }}">Audit History</a></li>
 @endif
 
 <!-- @if(\Auth::User()->type == 'substore' || \Auth::User()->type == 'In-patient')

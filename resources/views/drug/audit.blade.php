@@ -22,7 +22,7 @@
                             <input type="text" name="name[]" class="form-control" readonly value="{{ $drug->name }}">
                         </div>
 
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-2">
                             <label for="">currently at hand</label>
                             <input type="number" readonly name="currently_at_hand[]" required class="form-control" value="{{ $drug->qtyonhand }}">
                         </div>
@@ -37,7 +37,7 @@
                             <input type="text" name="cost_price[]" readonly class="form-control" value="{{ $drug->cprice }}">
                         </div>
 
-                        <div class="form-group col-md-1">
+                        <div class="form-group col-md-2">
                             <label for="">at hand</label>
                             <input type="number" required name="at_hand[]" class="form-control" value="">
                         </div>

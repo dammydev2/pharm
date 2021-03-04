@@ -34,7 +34,9 @@
                     </tr>
                     @endforeach
                     <tr>
-                        <td colspan="5" class="text-right">TOTAL</td>
+                        <td class="text-right">Audited by: {{ $audit->auditor }}</td>
+                        <td class="text-right">Date audited: {{ date_format($audit->created_at, "Y-m-d") }}</td>
+                        <td colspan="3" class="text-right">TOTAL</td>
                         <td class="text-right">{{ number_format($gross, 2) }}</td>
                     </tr>
                 </table>

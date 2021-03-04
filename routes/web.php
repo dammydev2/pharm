@@ -116,8 +116,11 @@ Route::get('/viewExpiredDrugs', 'HomeController@viewExpiredDrugs');
 Route::get('/showExpiredDrugs', 'HomeController@showExpiredDrugs');
 Route::get('/audit', 'HomeController@audit');
 Route::get('/auditReport', 'HomeController@auditReport');
+Route::get('/auditHistory', 'HomeController@auditHistory');
+Route::get('/getAuditReport', 'HomeController@getAuditReport');
 
 Route::post('/enterAudit', 'HomeController@enterAudit');
+Route::post('/checkAuditReport', 'HomeController@checkAuditReport');
 Route::post('/sale_enter', 'HomeController@sale_enter');
 Route::post('/checkExpiredDrugs', 'HomeController@checkExpiredDrugs');
 Route::post('/removeReceipt', 'HomeController@removeReceipt');
