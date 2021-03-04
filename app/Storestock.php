@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Storestock extends Model
 {
-    protected $fillable = ['name', 'cprice', 'quantity', 'selling_price', 'exp', 'autenticate', 'pack', 'batch_no', 'supplier_name', 'type'];
+    protected $fillable = ['name', 'cprice', 'currently_at_hand', 'quantity', 'selling_price', 'exp', 'autenticate', 'pack', 'batch_no', 'supplier_name', 'type'];
 }

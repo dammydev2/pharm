@@ -12,6 +12,7 @@ use App\Payment;
 use App\Storestock;
 use App\Order;
 use App\DailyStock;
+use App\Audit;
 use Session;
 use DB;
 use Hash;
@@ -39,7 +40,8 @@ class HomeController extends Controller
    */
   public function index()
   {
-    return view('home');
+    $isDrugExpiring = $this->expire();
+    return view('home')->with('isDrugExpiring', $isDrugExpiring);
   }
 
   public function adddrug()
@@ -505,6 +507,7 @@ class HomeController extends Controller
       'supplier_name' => $request['supplier_name'],
       'autenticate' => \Auth::User()->name,
       'type' => \Auth::User()->type,
+      'currently_at_hand' => $request['quantity']
     ]);
     $newstock = $request['quantity'] + $request['qtyonhand'];
     Store::where('id', $request['id'])
@@ -858,6 +861,11 @@ class HomeController extends Controller
     $data['sales'] = Order::whereDate('created_at', '>=', $dates['start_date'])
       ->whereDate('created_at', '<=', $dates['end_date'])->orderBy('created_at', 'asc')->get();
 
+      // expired drugs
+      $data['expiredDrugs'] = Storestock::whereDate('exp', '>=', $dates['start_date'])
+      ->whereDate('exp', '<=', $dates['end_date'])
+      ->orderBy('exp', 'asc')->get();
+
     // this cost of sales is for inpatient and substore
     $data['wing_sales'] = Payment::whereDate('created_at', '>=', $dates['start_date'])
       ->whereDate('created_at', '<=', $dates['end_date'])->sum('sprice');
@@ -1047,6 +1055,105 @@ class HomeController extends Controller
   public function expire()
   {
     $today = date('Y-m-d');
-    return $today;
+    $next_due_date = date('Y-m-d', strtotime($today. ' +30 days'));
+    $soonToExpire = Storestock::whereDate('exp', '>=', $today)
+    ->whereDate('exp', '<=', $next_due_date)
+    ->where('currently_at_hand', '>', 0)
+    ->orderBy('name', 'asc')->get();
+    return $soonToExpire;
   }
+
+  public function checkExpiring()
+  {
+    $expiringDrugs = $this->expire();
+    return view('drug.checkExpiring')->with('expiringDrugs', $expiringDrugs);
+  }
+
+  public function updateExpiring(Request $request)
+  {
+    // return $request;
+    $num = count($request['name']);
+    for($i=0; $i < $num; $i++){
+      Storestock::where('id', $request['id'][$i])
+      ->update([
+        'currently_at_hand' => $request['currently_at_hand'][$i]
+      ]);
+    }
+    return redirect()->back()->with('success', 'updated successfully');
+  }
+
+  public function viewExpiredDrugs()
+  {
+    return view('drug.viewExpiredDrugs');
+  }
+
+  public function checkExpiredDrugs(Request $request)
+  {
+    $request->validate([
+      'start_date' => 'required',
+      'end_date' => 'required',
+    ]);
+    Session::put('dates', $request->all());
+    return redirect('showExpiredDrugs');
+  }
+
+  public function showExpiredDrugs()
+  {
+    $dates = Session::get('dates');
+    $expiredDrugs = Storestock::whereDate('exp', '>=', $dates['start_date'])
+      ->whereDate('exp', '<=', $dates['end_date'])
+      ->orderBy('exp', 'asc')->get();
+    return view('drug.showExpiredDrugs')->with('expiredDrugs', $expiredDrugs)->with('sn', 1);
+  }
+
+  public function audit()
+  {
+    $allDrugs = Store::OrderBy('name', 'asc')->get();
+    return view('drug.audit')->with('allDrugs', $allDrugs);
+  }
+
+  public function enterAudit(Request $request)
+  {
+    $num = count($request['name']);
+    for($i=0; $i < $num; $i++){
+      Audit::create([
+        'name' => $request['name'][$i],
+        'currently_at_hand' => $request['currently_at_hand'][$i],
+        'folio_no' => $request['folio_no'][$i],
+        'cost_price' => $request['cost_price'][$i],
+        'at_hand' => $request['at_hand'][$i],
+        'auditor' => \Auth::User()->name
+      ]);
+    }
+    return redirect('auditReport');
+  }
+
+  public function auditReport()
+  {
+    $today = date('Y-m-d');
+    $audits = Audit::whereDate('created_at', $today)
+    ->orderBy('name', 'asc')->get();
+    return view('drug.auditReport')->with('audits',$audits);
+  }
+
+  public function auditHistory()
+  {
+    $dates = Audit::groupBy('created_at')->get();
+    return view('drug.auditHistory')->with('dates', $dates);
+  }
+
+  public function checkAuditReport(Request $request)
+  {
+    Session::put('date', $request['date']);
+    return redirect('getAuditReport');
+  }
+
+  public function getAuditReport()
+  {
+    $date = Session::get('date');
+    $audits = Audit::whereDate('created_at', $date)
+    ->orderBy('name', 'asc')->get();
+    return view('drug.auditReport')->with('audits',$audits);
+  }
+
 }

@@ -11,7 +11,13 @@
             <div class="panel-heading">Stock Report</div>
             <div class="panel-body">
 
-                <?php $dates = Session::get('dates') ?>
+                <?php
+                $dates = Session::get('dates');
+                $totalExpiredDrugs = 0;
+                foreach ($data['expiredDrugs'] as $expiredDrug) {
+                    $totalExpiredDrugs += $expiredDrug->selling_price * $expiredDrug->currently_at_hand;
+                }
+                ?>
 
                 <ul class="list-group">
                     <li class="list-group-item">TOTAL OPENING STOCK <span id="totalOpeningStock" class="badge"></span></li>
@@ -22,7 +28,8 @@
                     <li class="list-group-item">TOTAL COST PRICE<span id="costPrice" class="badge"></span></li>
                     <li class="list-group-item">GROSS PROFIT = ( (TOTAL SALES + 4-wings block + Ijoga-Orile + Cardio + ETR) - TOTAL COST PRICE)<span class="badge"></span></li>
                     <li class="list-group-item">5% MARKUP = GROSS PROFIT * 0.05<span class="badge"></span></li>
-                    <li class="list-group-item">NET PROFIT = GROSS PROFIT - 5% MARKUP<span class="badge"></span></li>
+                    <li class="list-group-item">EXPIRED DRUGS<span class="badge">{{ number_format($totalExpiredDrugs, 2) }}</span></li>
+                    <li class="list-group-item">NET PROFIT = GROSS PROFIT - (5% MARKUP + EXPIRED DRUGS)<span class="badge"></span></li>
                     <!-- <li class="list-group-item">CLOSING STOCK <span class="badge">5</span></li>
                     <li class="list-group-item">TOTAL SALES <span class="badge">3</span></li> -->
                 </ul>
@@ -68,7 +75,8 @@
                                 <th>closing stock</th>
                                 <th>selling price</th>
                             </tr>
-                            <?php $totalClosingStock = 0; $closingStockCost = 0; ?>
+                            <?php $totalClosingStock = 0;
+                            $closingStockCost = 0; ?>
                             @foreach($data['closing_stock'] as $stock)
                             <tr>
                                 <td>{{ $stock->name }}</td>
@@ -83,7 +91,8 @@
                     </div>
                     <!-- PURCHASES TABLE -->
 
-                    <?php $totalPurchases = 0; $purchaseCost = 0; ?>
+                    <?php $totalPurchases = 0;
+                    $purchaseCost = 0; ?>
                     @foreach($data['purchases'] as $purchase)
 
                     <?php $totalPurchases += ($purchase->quantity * $purchase->selling_price) ?>
