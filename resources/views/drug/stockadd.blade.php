@@ -32,7 +32,7 @@
 
                     <div class="form-group">
                         <label>Selling Price</label>
-                        <input type="number" name="selling_price" value="{{ $row->selling_price }}" class="form-control">
+                        <input type="number" name="selling_price" readonly value="{{ $row->selling_price }}" class="form-control">
                     </div>
 
                     <!-- <div class="form-group">
