@@ -44,10 +44,10 @@
                         <input type="text" name="collector" class="form-control">
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Expire Date</label>
-                        <input type="date" name="expire_date" class="form-control">
-                    </div>
+                        <input type="text" name="expire_date" value="{{ $row->exp }}" class="form-control">
+                    </div> -->
 
                     <div class="form-group">
                         <label>Department/Unit/Ward collecting</label>
@@ -55,7 +55,7 @@
                         <select name="unit" class="form-control" id="">
                             <option>4-wing block</option>
                             <option>Ijoga Orile</option>
-                            <option value="substore">Sub store</option>
+                            <option value="substore">Sub-store/Dispensory</option>
                             <option>Cardio unit</option>
                             <option>In-patient</option>
                             <option>ETR</option>

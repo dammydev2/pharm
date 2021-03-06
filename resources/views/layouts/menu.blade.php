@@ -5,7 +5,7 @@
 <li><a href="{{ url('/recall') }}">Recall Prescription</a></li>
 <li><a href="{{ url('/report') }}">Report</a></li>
 <li><a href="{{ url('/return') }}">Return Stock</a></li>
-<li><a href="{{ url('/returnReceipt') }}">Return Receipt</a></li>
+<li><a href="{{ url('/returnReceipt') }}">Return Receipt (Reduce Qty.)</a></li>
 <li><a href="{{ url('/totalSales') }}">Total Sales</a></li>
 <li><a href="{{ url('/drug') }}">Drug/Stock</a></li>
 @endif

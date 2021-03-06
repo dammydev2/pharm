@@ -511,7 +511,6 @@ class HomeController extends Controller
     ]);
     $newstock = $request['quantity'] + $request['qtyonhand'];
     Store::where('id', $request['id'])
-      ->where('type', \Auth::User()->type)
       ->update([
         'qtyonhand' => $newstock,
         'selling_price' => $request['selling_price']
@@ -532,7 +531,7 @@ class HomeController extends Controller
 
   public function order($id)
   {
-    $data = Store::where('id', $id)->where('type', \Auth::User()->type)->get();
+    $data = Store::where('id', $id)->get();
     return view('drug.order', compact('data'));
   }
 
@@ -542,7 +541,6 @@ class HomeController extends Controller
       'quantity' => 'required',
       'collector' => 'required',
       'unit' => 'required',
-      'expire_date' => 'required',
     ]);
 
     $newqty = $request['qtyonhand'] - $request['quantity'];
@@ -604,7 +602,7 @@ class HomeController extends Controller
         'sprice' => $request['selling_price'],
         'cprice' => $request['cost_price'],
         'quantity' => $request['quantity'],
-        'exp' => $request['expire_date'],
+        'exp' => '',
         'stockid' => $drugID,
         'identity' => $request['unit'],
       ]);
@@ -1066,6 +1064,7 @@ class HomeController extends Controller
   public function checkExpiring()
   {
     $expiringDrugs = $this->expire();
+    // return $expiringDrugs->store;
     return view('drug.checkExpiring')->with('expiringDrugs', $expiringDrugs);
   }
 

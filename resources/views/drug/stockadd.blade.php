@@ -27,15 +27,15 @@
 
                     <div class="form-group">
                         <label>Cost Price</label>
-                        <input type="number" name="cprice" value="{{ $row->cprice }}" class="form-control">
+                        <input type="number" name="cprice" readonly value="{{ $row->cprice }}" class="form-control">
                     </div>
 
                     <div class="form-group">
                         <label>Selling Price</label>
-                        <input type="number" name="selling_price" value="{{ $row->selling_price }}" class="form-control">
+                        <input type="number" name="selling_price" readonly value="{{ $row->selling_price }}" class="form-control">
                     </div>
 
-                    <!-- <div class="form-group">
+                    <!-- <div class="form-group" INFORMAL WITNESSING>
                         <label>Packs in Package / Pack Size</label>
                         <input type="number" name="qty" value="{{ $row->qty }}" class="form-control">
                     </div> -->
