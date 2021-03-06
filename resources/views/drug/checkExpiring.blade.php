@@ -20,13 +20,15 @@
                     @foreach($expiringDrugs as $expiringDrug)
                     <div class="col-md-12">
 
-                        <div class="form-group col-md-4">
+                    
+
+                        <div class="form-group col-md-2">
                             <label for="">name</label>
                             <input type="text" name="name[]" class="form-control" readonly value="{{ $expiringDrug->name }}">
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label for="">currently at hand</label>
+                            <label class="text-danger" for="">Insert Qty. at hand</label>
                             <input type="number" name="currently_at_hand[]" required class="form-control" value="{{ $expiringDrug->currently_at_hand }}">
                         </div>
 
@@ -35,9 +37,14 @@
                             <input type="text" name="expire_date[]" readonly class="form-control" value="{{ $expiringDrug->exp }}">
                         </div>
 
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-2">
                             <label for="">batch No.</label>
                             <input type="text" name="batch_no[]" readonly class="form-control" value="{{ $expiringDrug->batch_no }}">
+                        </div>
+
+                        <div class="form-group col-md-2">
+                            <label for="">folio No.</label>
+                            <input type="text" name="folio_no[]" readonly class="form-control" value="{{ $expiringDrug->store->folio_no }}">
                         </div>
 
                         <input type="hidden" name="id[]" value="{{ $expiringDrug->id }}">
