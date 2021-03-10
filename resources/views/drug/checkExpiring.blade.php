@@ -12,7 +12,7 @@
             <div class="panel-heading">Expiring Drug</div>
             <div class="panel-body">
 
-                <h3>The following drugs will be expiring in less than a month time</h3>
+                <h3>The following drugs will be expiring in less than 60 days time</h3>
                 <p class="text-danger">Enter the current quantity at hand and <b>0 (zero)</b> if the drugs with the batch No. has finished</p>
 
                 <form action="{{ url('updateExpiring') }}" method="post">
