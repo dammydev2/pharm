@@ -12,7 +12,7 @@
 
 		<?php
 		$warning = (time() > strtotime('2023-02-01'));
-		$expired = (time() > strtotime('2023-04-01'));
+		$expired = (time() > strtotime('2023-06-01'));
 		?>
 
 		@if ($warning)
