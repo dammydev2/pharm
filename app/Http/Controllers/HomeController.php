@@ -223,7 +223,7 @@ class HomeController extends Controller
     //getting the receipt number
     $type = \Auth::User()->type;
     if ($type === 'In-patient') {
-      $first = 'P';
+      $first = 'W';
     } else {
       $first = "D";
     }
@@ -1053,7 +1053,7 @@ class HomeController extends Controller
   public function expire()
   {
     $today = date('Y-m-d');
-    $next_due_date = date('Y-m-d', strtotime($today. ' +30 days'));
+    $next_due_date = date('Y-m-d', strtotime($today. ' +60 days'));
     $soonToExpire = Storestock::whereDate('exp', '>=', $today)
     ->whereDate('exp', '<=', $next_due_date)
     ->where('currently_at_hand', '>', 0)

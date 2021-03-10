@@ -25,7 +25,7 @@
                     @endif
 
                     <div class="form-group">
-                        <label for="">Departmrnt</label>
+                        <label for="">Department</label>
                         <select name="department" class="form-control" id="">
                             @foreach($departments as $department)
                             <option>{{ $department->collecting_unit }}</option>

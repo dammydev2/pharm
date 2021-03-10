@@ -70,7 +70,7 @@
                                     <option value="sales">Sales/Dispensory</option>
                                     <option value="payment">Payment</option>
                                     <option value="substore">Ijoga Orile</option>
-                                    <option value="In-patient">In-patient</option>
+                                    <option value="In-patient">In-patient/Ward Supply</option>
                                     <option value="substore">Cardio Unit</option>
                                     <option value="substore">4-Wing Block</option>
                                     <option value="substore">ETR</option>

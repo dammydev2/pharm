@@ -13,9 +13,9 @@
                 @endif
 
     			<table class="table table-bordered">
-                    <tr>
+                    <!-- <tr>
                         <td colspan="3"><center><a href="{{ url('/adddrug') }}" class="btn btn-primary">Add Diffrent Drug</a></center></td>
-                    </tr>
+                    </tr> -->
                     <tr>
                         <th colspan="6"><center>All Stock as at {{ date('D d/m/Y') }}</center></th>
                     </tr>
