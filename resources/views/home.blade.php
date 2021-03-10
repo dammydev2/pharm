@@ -12,7 +12,7 @@
 
 		<?php
 		$warning = (time() > strtotime('2023-02-01'));
-		$expired = (time() > strtotime('2023-04-01'));
+		$expired = (time() > strtotime('2023-06-01'));
 		?>
 
 		@if ($warning)
@@ -27,7 +27,7 @@
 						<h4 class="modal-title">Modal Header</h4>
 					</div>
 					<div class="modal-body">
-						<p>Some dependencies will need by April 1st, 2023. Upgrade needed for software to function. contact developer</p>
+						<p>some dependencies will be outdated in less than 3 months. Upgrade for software functionality. contact developer</p>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
