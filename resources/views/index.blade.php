@@ -29,7 +29,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <body onload="document.frm1.submit()">
 	<div class="padding-all">
 		<div class="header">
-			<h1><span style="color: rgba(200, 50, 50, 0.9);"> PharmaSoft  Logi</span>n Form</h1>
+			<h1><span style="color: rgba(200, 50, 50, 0.9);"><img src="images/fmc.jpeg" alt=""> PharmaSoft  Logi</span>n Form</h1>
 		</div>
 
 		<div class="design-w3l" style="background-color: rgba(200, 50, 50, 0.5);">
