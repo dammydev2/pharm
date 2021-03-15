@@ -555,6 +555,7 @@ class HomeController extends Controller
       'quantity' => $request['quantity'],
       'collector' => $request['collector'],
       'cost_price' => $request['cost_price'],
+      'selling_price' => $request['selling_price'],
       'collecting_unit' => $request['unit'],
       'seller' => \Auth::User()->name,
       'type' => \Auth::User()->type
@@ -940,6 +941,7 @@ class HomeController extends Controller
       ->whereDate('created_at', '>=', $request['start_date'])
       ->whereDate('created_at', '<=', $request['end_date'])
       ->orderBy('created_at', 'asc')->get();
+      // return $orders;
     return view('report.getDeptStockReport')->with('orders', $orders)->with('sn', 1);
   }
 
