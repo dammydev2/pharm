@@ -12,4 +12,9 @@ class DailyStock extends Model
         'cost_price',
         'selling_price',
     ];
+
+    public function store()
+    {
+        return $this->hasOne(Store::class, 'name', 'name');
+    }
 }

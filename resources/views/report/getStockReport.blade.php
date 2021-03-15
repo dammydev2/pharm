@@ -37,14 +37,16 @@
                 <button data-toggle="collapse" class="btn btn-primary btn-block" data-target="#demo">Show Stock Details</button>
 
                 <div id="demo" class="collapse">
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <table class="table table-bordered">
                             <tr>
                                 <th colspan="3" class="text-center">Opening Stock for {{ $dates['start_date'] }}</th>
                             </tr>
                             <tr>
                                 <th>drug</th>
+                                <th>folio No.</th>
                                 <th>opening stock</th>
+                                <th>cost price</th>
                                 <th>selling price</th>
                             </tr>
                             <?php
@@ -55,7 +57,9 @@
                             @foreach($data['opening_stock'] as $stock)
                             <tr>
                                 <td>{{ $stock->name }}</td>
+                                <td>{{ $stock->stock->folio_no }}</td>
                                 <td>{{ $stock->current_stock }}</td>
+                                <td class="text-right">{{ number_format($stock->cost_price, 2) }}</td>
                                 <td class="text-right">{{ number_format($stock->selling_price, 2) }}</td>
                             </tr>
                             <?php $totalOpeningStock += ($stock->current_stock * $stock->selling_price) ?>
@@ -65,14 +69,16 @@
                         </table>
                     </div>
 
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <table class="table table-bordered">
                             <tr>
                                 <th colspan="3" class="text-center">Closing Stock for {{ $dates['end_date'] }}</th>
                             </tr>
                             <tr>
                                 <th>drug</th>
+                                <th>folio No.</th>
                                 <th>closing stock</th>
+                                <th>cost price</th>
                                 <th>selling price</th>
                             </tr>
                             <?php $totalClosingStock = 0;
@@ -80,7 +86,9 @@
                             @foreach($data['closing_stock'] as $stock)
                             <tr>
                                 <td>{{ $stock->name }}</td>
+                                <td>{{ $stock->store->folio_no }}</td>
                                 <td>{{ $stock->current_stock }}</td>
+                                <td class="text-right">{{ number_format($stock->cost_price, 2) }}</td>
                                 <td class="text-right">{{ number_format($stock->selling_price, 2) }}</td>
                             </tr>
                             <?php $totalClosingStock += ($stock->current_stock * $stock->selling_price) ?>
