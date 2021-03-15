@@ -51,7 +51,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		</div>
 		
 		<div class="footer">
-		<p>© {{ date('Y') }} . All Rights Reserved | </p>
+		<p>© FMCA-ICT {{ date('Y') }} . All Rights Reserved | </p>
 		</div>
 	</div>
 </body>
