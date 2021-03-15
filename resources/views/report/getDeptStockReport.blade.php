@@ -18,7 +18,9 @@
                     <tr>
                         <th>s/n</th>
                         <th>date collected</th>
+                        <th>collector</th>
                         <th>drug</th>
+                        <th>folio No.</th>
                         <th>units collected</th>
                         <th>unit selling price</th>
                         <th> amount</th>
@@ -28,7 +30,9 @@
                     <tr>
                         <td>{{ $sn++ }}</td>
                         <th>{{ $order->created_at->toDateString() }}</th>
+                        <th>{{ $order->collector }}</th>
                         <th>{{ $order->name }}</th>
+                        <th>{{ $order->store->folio_no }}</th>
                         <th>{{ $order->quantity }}</th>
                         <th class="text-right">{{ number_format($order->selling_price, 2) }}</th>
                         <th class="text-right">{{ number_format($net_total = $order->selling_price * $order->quantity, 2) }}</th>
@@ -36,7 +40,7 @@
                     </tr>
                     @endforeach
                     <tr>
-                        <th colspan="5" class="text-right">GROSS TOTAL</th>
+                        <th colspan="7" class="text-right">GROSS TOTAL</th>
                         <th class="text-right">{{ number_format($gross_total, 2) }}</th>
                     </tr>
                 </table>
