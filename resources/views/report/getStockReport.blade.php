@@ -44,10 +44,10 @@
                             </tr>
                             <tr>
                                 <th>drug</th>
-                                <th>folio No.</th>
+                                <th>F-No.</th>
                                 <th>opening stock</th>
-                                <th>cost price</th>
-                                <th>selling price</th>
+                                <th>CP</th>
+                                <th>SP</th>
                             </tr>
                             <?php
                             $totalOpeningStock = 0;
@@ -76,10 +76,10 @@
                             </tr>
                             <tr>
                                 <th>drug</th>
-                                <th>folio No.</th>
+                                <th>F-No.</th>
                                 <th>closing stock</th>
-                                <th>cost price</th>
-                                <th>selling price</th>
+                                <th>CP</th>
+                                <th>SP</th>
                             </tr>
                             <?php $totalClosingStock = 0;
                             $closingStockCost = 0; ?>
